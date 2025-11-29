@@ -19,26 +19,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="计划中的事情 这个博客还很简陋，没有高级功能。所以接下来： 1. MathJax 数学公式渲染 2. 代码块渲染">
+    <meta name="description" content="如何在使用 Apple M SoC 的苹果电脑上原生玩到经典游戏《雷神之锤 3》呢？布朗尼手把手教你！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="To do list">
-<meta property="og:url" content="https://bluemicro233.github.io/2025/11/29/To-do-list/index.html">
+<meta property="og:title" content="在 Apple Silicon 上原生运行 Quake III Arena">
+<meta property="og:url" content="https://bluemicro233.github.io/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/index.html">
 <meta property="og:site_name" content="布朗尼的小屋">
-<meta property="og:description" content="计划中的事情 这个博客还很简陋，没有高级功能。所以接下来： 1. MathJax 数学公式渲染 2. 代码块渲染">
+<meta property="og:description" content="如何在使用 Apple M SoC 的苹果电脑上原生玩到经典游戏《雷神之锤 3》呢？布朗尼手把手教你！">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-11-29T14:13:59.000Z">
-<meta property="article:modified_time" content="2025-11-29T14:15:59.032Z">
+<meta property="article:published_time" content="2025-11-29T15:19:19.000Z">
+<meta property="article:modified_time" content="2025-11-29T15:37:54.769Z">
 <meta property="article:author" content="布朗尼蛋糕">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://bluemicro233.github.io/2025/11/29/To-do-list/">
+<link rel="canonical" href="https://bluemicro233.github.io/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://bluemicro233.github.io/2025/11/29/To-do-list/","path":"2025/11/29/To-do-list/","title":"To do list"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"en","comments":true,"permalink":"https://bluemicro233.github.io/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/","path":"2025/11/29/在-Apple-Silicon-上原生运行-Quake-III-Arena/","title":"在 Apple Silicon 上原生运行 Quake III Arena"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>To do list | 布朗尼的小屋</title>
+<title>在 Apple Silicon 上原生运行 Quake III Arena | 布朗尼的小屋</title>
   
 
 
@@ -126,7 +126,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E5%88%92%E4%B8%AD%E7%9A%84%E4%BA%8B%E6%83%85"><span class="nav-number">1.</span> <span class="nav-text">计划中的事情</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">前置工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">进一步配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%92%88%E5%AF%B9-macos-26-%E6%B2%A1%E6%9C%89%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">针对 macOS 26 没有声音的问题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -167,7 +167,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/29/To-do-list/">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -180,12 +180,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="To do list | 布朗尼的小屋">
+      <meta itemprop="name" content="在 Apple Silicon 上原生运行 Quake III Arena | 布朗尼的小屋">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          To do list
+          在 Apple Silicon 上原生运行 Quake III Arena
         </h1>
 
         <div class="post-meta-container">
@@ -197,7 +197,7 @@
       <span class="post-meta-item-text">Posted on</span>
       
 
-      <time title="Created: 2025-11-29 22:13:59 / Modified: 22:15:59" itemprop="dateCreated datePublished" datetime="2025-11-29T22:13:59+08:00">2025-11-29</time>
+      <time title="Created: 2025-11-29 23:19:19 / Modified: 23:37:54" itemprop="dateCreated datePublished" datetime="2025-11-29T23:19:19+08:00">2025-11-29</time>
     </span>
 
   
@@ -209,9 +209,49 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="计划中的事情">计划中的事情</h2>
-<p>这个博客还很简陋，没有高级功能。所以接下来： <strong>1. MathJax
-数学公式渲染</strong> <strong>2. 代码块渲染</strong></p>
+    <div class="post-body" itemprop="articleBody"><p>如何在使用 Apple M SoC 的苹果电脑上原生玩到经典游戏《雷神之锤
+3》呢？布朗尼手把手教你！</p>
+<span id="more"></span>
+<h2 id="前置工作">前置工作</h2>
+<ol type="1">
+<li><p>一份在 Windows 平台下载的原版 Quake III Arena
+的游戏文件。</p></li>
+<li><p>在 ioquake3.org/get-it/ 下载一份基于 Universal 2 Build 的 macOS
+build 文件。</p></li>
+<li><p>在 ioquake3.org/extras/patch-data 下载一个 zip 文件（将自动解压为
+quake3-latest-pk3s 文件夹）。</p></li>
+</ol>
+<p>这两个部分准备好了，就可以正式安装了。</p>
+<h2 id="安装">安装</h2>
+<ol type="1">
+<li><p>在“应用程序”文件夹中创建一个名为 ioquake3 的文件夹。</p></li>
+<li><p>将下载的文件（ioquake3.app）移动到刚刚创建的 ioquake3
+文件夹内。</p></li>
+<li><p>把下载的 quake3-latest-pk3s 文件夹内的两个文件夹解压至 ioquake3
+文件夹内。</p></li>
+<li><p>把 Windows 上的 pak0.pk3 资产文件复制下来，并且转移到 mac
+上。</p></li>
+</ol>
+<h2 id="进一步配置">进一步配置</h2>
+<p>运行 ioquake3 进入游戏，它会提示输入 CD-KEY，可以直接回车键跳过。</p>
+<p>此时，屏幕分辨率是个问题，并且有人可能还不在全屏模式，需要在控制台调整。<strong>id
+tech 引擎呼出控制台为 <code>~</code> 键。</strong></p>
+<p>我的 MacBook Air 的分辨率是 2560*1664，所以逐个输入以下指令：</p>
+<p><code>/r_mode -1</code></p>
+<p><code>/r_customheight 1664</code></p>
+<p><code>/r_customwidth 2560</code></p>
+<p>应用分辨率，输入：</p>
+<p><code>/vid_restart</code></p>
+<p>并且还需要进入全屏模式，所以需要输入：</p>
+<p><code>/r_fullscreen 1</code></p>
+<p>至此，游戏配置就差不多了。我们还可以在自带的 SYSTEM
+设置里设置画质，例如纹理过滤模式、光照模式、几何细节等等。</p>
+<h2 id="针对-macos-26-没有声音的问题">针对 macOS 26 没有声音的问题</h2>
+<p>在 macOS 26 上运行具有 OpenAL
+音频库的程序存在兼容性问题，于是游戏无法正常播放声音。解决方法也很简单，只需输入以下指令禁用
+OpenAL 库并应用：</p>
+<p><code>/s_useOpenAL 0</code></p>
+<p><code>/snd_restart</code></p>
 
     </div>
 
@@ -225,14 +265,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/11/29/%E8%9B%8B%E7%96%BC/" rel="prev" title="蛋疼">
-                  <i class="fa fa-angle-left"></i> 蛋疼
+                <a href="/2025/11/29/To-do-list/" rel="prev" title="To do list">
+                  <i class="fa fa-angle-left"></i> To do list
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/" rel="next" title="在 Apple Silicon 上原生运行 Quake III Arena">
-                  在 Apple Silicon 上原生运行 Quake III Arena <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
