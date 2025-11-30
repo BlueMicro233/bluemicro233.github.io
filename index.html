@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width">
@@ -17,13 +17,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
     <meta property="og:type" content="website">
 <meta property="og:title" content="布朗尼的小屋">
 <meta property="og:url" content="https://bluemicro233.github.io/index.html">
 <meta property="og:site_name" content="布朗尼的小屋">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="布朗尼蛋糕">
 <meta name="twitter:card" content="summary">
 
@@ -31,7 +31,7 @@
 <link rel="canonical" href="https://bluemicro233.github.io/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"en","comments":"","permalink":"","path":"index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>布朗尼的小屋</title>
@@ -79,7 +79,10 @@
     <div class="column">
       <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
   <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
     </div>
   </div>
 
@@ -93,13 +96,17 @@
   </div>
 
   <div class="site-nav-right">
-    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
     </div>
   </div>
 </div>
 
 
 
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa-user fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
 
 
 
@@ -112,10 +119,10 @@
     <div class="sidebar-inner sidebar-overview-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
-          Table of Contents
+          文章目录
         </li>
         <li class="sidebar-nav-overview">
-          Overview
+          站点概览
         </li>
       </ul>
 
@@ -135,13 +142,13 @@
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
           <span class="site-state-item-count">4</span>
-          <span class="site-state-item-name">posts</span>
+          <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
         <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">tags</span></a>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
@@ -166,7 +173,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/30/%E9%94%90%E8%AF%84/">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -184,7 +191,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/11/30/%E9%94%90%E8%AF%84/" class="post-title-link" itemprop="url">锐评</a>
+          <a href="/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" class="post-title-link" itemprop="url">C# 垃圾回收</a>
         </h2>
 
         <div class="post-meta-container">
@@ -193,10 +200,10 @@
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="Created: 2025-11-30 00:12:24 / Modified: 00:56:04" itemprop="dateCreated datePublished" datetime="2025-11-30T00:12:24+08:00">2025-11-30</time>
+      <time title="创建时间：2025-11-30 09:50:23 / 修改时间：11:14:07" itemprop="dateCreated datePublished" datetime="2025-11-30T09:50:23+08:00">2025-11-30</time>
     </span>
 
   
@@ -209,10 +216,63 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>昨天，我和游戏开发工作室一起出去摆摊，由于有一位同届的朋友一直在旁边写
-Java，不由得感叹自己什么都不会。结果被编程领域大神锐评:“<strong>你会锐评!</strong>”</p>
-<p>我应该是第一次真正知道我在一部分程序员心里是什么样子。大约从两年前开始，自己就打印各式各样的论文和白皮书，买一些图形学教材到学校去看。由于高中十分傻逼的教育模式，我几乎无法做一些更有意义的事，除了阅读图形文献。于是这段时间基本上只有基础理论得到训练。</p>
-<p>当然，说到高中，我被逼出了超级脆的内心，并且影响持续到现在。否则我都不会写出这么扯淡的文章。</p>
+          <p>C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得
+free()
+手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage
+Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点
+C#。它当然有一套 GC 机制。</p>
+<h2 id="gc-的条件">GC 的条件</h2>
+<ol type="1">
+<li><p>内存不足。</p></li>
+<li><p>手动调用了 <code>GC.Collect</code> 方法：</p></li>
+</ol>
+<pre><code class="highlight csharp"><span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++)
+&#123;
+    <span class="keyword">var</span> temp = <span class="keyword">new</span> <span class="built_in">object</span>();
+&#125;
+<span class="comment">// 强制触发 GC</span>
+GC.Collect();</code></pre>
+<h2 id="gc-的机制">GC 的机制</h2>
+<p>GC
+先默认堆中的所有对象都是可以回收的，然后再标记哪些对象被引用（它们是可达/活动的），然后清除掉不可达的对象。</p>
+<p><code>GC.Collect()</code> 里面可以有参数，比如 0 就对应 Gen
+0。这是因为 Generational GC 的关系。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Gen 0</th>
+<th style="text-align: center;">Gen 1</th>
+<th style="text-align: center;">Gen 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">新创建的(小)</td>
+<td style="text-align: center;">Gen 0 回收后存活的</td>
+<td style="text-align: center;">长期存活的(大)</td>
+</tr>
+</tbody>
+</table>
+<p>当 Gen 0 堆中的内存达到某个阈值，则触发 Gen 0 GC，剩下的存活对象进入
+Gen 1；如果 Gen 1 的也达到阈值，则触发 Gen 1 GC，并且同时 Gen 0
+中的也再次回收一遍，存活的对象全部放入 Gen 2 的堆内存空间；Gen 2 GC
+则同时回收 0, 1, 2 三代的。</p>
+<h2 id="问题">问题</h2>
+<h3 id="gc-需要时间">GC 需要时间</h3>
+<p>假设在一个大型开放世界游戏内，玩家突然从一个点跑到距离很远的另一个点，那么旧的点周围的资产必须被卸载掉，否则会爆内存。</p>
+<figure>
+<img src="/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg" class="" title="大型开放世界">
+<figcaption>
+《荒野大镖客：救赎 2》
+</figcaption>
+</figure>
+<p>如果在这期间进行
+GC，游戏将面临十分严重的卡顿。解决方法就是黑屏加载，但是这相当影响观感，所以非传统的流式资产传输（Streaming
+Assets）应运而生，比如在《荒野大镖客：救赎
+2》这样的游戏里，使用外挂进行超速飞行，很难感觉到卡顿。</p>
+<h3 id="gc-不能释放所有资源">GC 不能释放所有资源</h3>
+<p>GC
+并不能释放非托管的资源，因为回收机制的一个前提就是它要回收的内存被分配在托管堆上。</p>
 
       
     </div>
@@ -266,16 +326,16 @@ Java，不由得感叹自己什么都不会。结果被编程领域大神锐评:
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2025-11-29 23:19:19" itemprop="dateCreated datePublished" datetime="2025-11-29T23:19:19+08:00">2025-11-29</time>
+      <time title="创建时间：2025-11-29 23:19:19" itemprop="dateCreated datePublished" datetime="2025-11-29T23:19:19+08:00">2025-11-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-11-30 01:16:38" itemprop="dateModified" datetime="2025-11-30T01:16:38+08:00">2025-11-30</time>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-11-30 10:56:12" itemprop="dateModified" datetime="2025-11-30T10:56:12+08:00">2025-11-30</time>
     </span>
 
   
@@ -288,16 +348,47 @@ Java，不由得感叹自己什么都不会。结果被编程领域大神锐评:
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>如何在使用 Apple M SoC 的苹果电脑上原生玩到经典游戏《雷神之锤
-3》呢？布朗尼手把手教你！</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="前置工作">前置工作</h2>
+<ol type="1">
+<li><p>一份在 Windows 平台下载的原版 Quake III Arena
+的游戏文件。</p></li>
+<li><p>在 ioquake3.org/get-it/ 下载一份<strong>基于 Universal 2
+Build</strong> 的 macOS build 文件。</p></li>
+<li><p>在 ioquake3.org/extras/patch-data 下载一个 zip 文件（将自动解压为
+quake3-latest-pk3s 文件夹）。</p></li>
+</ol>
+<p>这两个部分准备好了，就可以正式安装了。</p>
+<h2 id="安装">安装</h2>
+<ol type="1">
+<li><p>在“应用程序”文件夹中创建一个名为 ioquake3 的文件夹。</p></li>
+<li><p>将下载的文件（ioquake3.app）移动到刚刚创建的 ioquake3
+文件夹内。</p></li>
+<li><p>把下载的 quake3-latest-pk3s 文件夹内的两个文件夹解压至 ioquake3
+文件夹内。</p></li>
+<li><p>把 Windows 上的 pak0.pk3 资产文件复制下来，并且转移到 mac
+上。</p></li>
+</ol>
+<h2 id="进一步配置">进一步配置</h2>
+<p>运行 ioquake3 进入游戏，它会提示输入 CD-KEY，可以直接回车键跳过。</p>
+<p>此时，屏幕分辨率是个问题，并且有人可能还不在全屏模式，需要在控制台调整。<strong>id
+tech 引擎呼出控制台为 <code>~</code> 键。</strong></p>
+<p>我的 MacBook Air 的分辨率是 2560*1664，所以逐个输入以下指令：</p>
+<p><code>/r_mode -1</code></p>
+<p><code>/r_customheight 1664</code></p>
+<p><code>/r_customwidth 2560</code></p>
+<p>应用分辨率，输入：</p>
+<p><code>/vid_restart</code></p>
+<p>并且还需要进入全屏模式，所以需要输入：</p>
+<p><code>/r_fullscreen 1</code></p>
+<p>至此，游戏配置就差不多了。我们还可以在自带的 SYSTEM
+设置里设置画质，例如纹理过滤模式、光照模式、几何细节等等。</p>
+<h2 id="针对-macos-26-没有声音的问题">针对 macOS 26 没有声音的问题</h2>
+<p>在 macOS 26 上运行具有 OpenAL
+音频库的程序存在兼容性问题，于是游戏无法正常播放声音。解决方法也很简单，只需输入以下指令禁用
+OpenAL 库并应用：</p>
+<p><code>/s_useOpenAL 0</code></p>
+<p><code>/snd_restart</code></p>
+
       
     </div>
 
@@ -350,16 +441,16 @@ Java，不由得感叹自己什么都不会。结果被编程领域大神锐评:
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2025-11-29 22:13:59" itemprop="dateCreated datePublished" datetime="2025-11-29T22:13:59+08:00">2025-11-29</time>
+      <time title="创建时间：2025-11-29 22:13:59" itemprop="dateCreated datePublished" datetime="2025-11-29T22:13:59+08:00">2025-11-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-11-30 00:56:48" itemprop="dateModified" datetime="2025-11-30T00:56:48+08:00">2025-11-30</time>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-11-30 00:56:48" itemprop="dateModified" datetime="2025-11-30T00:56:48+08:00">2025-11-30</time>
     </span>
 
   
@@ -428,16 +519,16 @@ Java，不由得感叹自己什么都不会。结果被编程领域大神锐评:
       <span class="post-meta-item-icon">
         <i class="far fa-calendar"></i>
       </span>
-      <span class="post-meta-item-text">Posted on</span>
+      <span class="post-meta-item-text">发表于</span>
 
-      <time title="Created: 2025-11-29 22:09:32" itemprop="dateCreated datePublished" datetime="2025-11-29T22:09:32+08:00">2025-11-29</time>
+      <time title="创建时间：2025-11-29 22:09:32" itemprop="dateCreated datePublished" datetime="2025-11-29T22:09:32+08:00">2025-11-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
-      <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-11-30 00:44:25" itemprop="dateModified" datetime="2025-11-30T00:44:25+08:00">2025-11-30</time>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-11-30 00:44:25" itemprop="dateModified" datetime="2025-11-30T00:44:25+08:00">2025-11-30</time>
     </span>
 
   
@@ -487,7 +578,7 @@ Java，不由得感叹自己什么都不会。结果被编程领域大神锐评:
     </span>
     <span class="author" itemprop="copyrightHolder">布朗尼蛋糕</span>
   </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
     </div>
@@ -500,7 +591,7 @@ Java，不由得感叹自己什么都不会。结果被编程领域大神锐评:
     <span class="toggle-line"></span>
   </div>
   <div class="sidebar-dimmer"></div>
-  <div class="back-to-top" role="button" aria-label="Back to top">
+  <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
   </div>

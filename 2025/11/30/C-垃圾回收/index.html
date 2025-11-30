@@ -19,27 +19,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="一事无成 我自从进入大学以来，已经过了大半学期。但自己什么都不会。 自卑 我经常会感到沮丧。总是会感觉自己在任何地方都做得很烂，即使别人做的比我还烂，但我也总会觉得别人的烂比我的烂更有含金量。">
+    <meta name="description" content="C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得 free() 手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点 C#。它当然有一套 GC 机制。 GC 的条件  内存不足。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="蛋疼">
-<meta property="og:url" content="https://bluemicro233.github.io/2025/11/29/%E8%9B%8B%E7%96%BC/index.html">
+<meta property="og:title" content="C# 垃圾回收">
+<meta property="og:url" content="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
 <meta property="og:site_name" content="布朗尼的小屋">
-<meta property="og:description" content="一事无成 我自从进入大学以来，已经过了大半学期。但自己什么都不会。 自卑 我经常会感到沮丧。总是会感觉自己在任何地方都做得很烂，即使别人做的比我还烂，但我也总会觉得别人的烂比我的烂更有含金量。">
+<meta property="og:description" content="C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得 free() 手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点 C#。它当然有一套 GC 机制。 GC 的条件  内存不足。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-11-29T14:09:32.000Z">
-<meta property="article:modified_time" content="2025-11-29T16:44:25.022Z">
+<meta property="og:image" content="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg">
+<meta property="article:published_time" content="2025-11-30T01:50:23.000Z">
+<meta property="article:modified_time" content="2025-11-30T03:14:07.151Z">
 <meta property="article:author" content="布朗尼蛋糕">
-<meta property="article:tag" content="闲聊">
+<meta property="article:tag" content="技术">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg">
 
 
-<link rel="canonical" href="https://bluemicro233.github.io/2025/11/29/%E8%9B%8B%E7%96%BC/">
+<link rel="canonical" href="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://bluemicro233.github.io/2025/11/29/%E8%9B%8B%E7%96%BC/","path":"2025/11/29/蛋疼/","title":"蛋疼"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/","path":"2025/11/30/C-垃圾回收/","title":"C# 垃圾回收"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>蛋疼 | 布朗尼的小屋</title>
+<title>C# 垃圾回收 | 布朗尼的小屋</title>
   
 
 
@@ -134,7 +136,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%8B%E6%97%A0%E6%88%90"><span class="nav-number">1.</span> <span class="nav-text">一事无成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8D%91"><span class="nav-number">2.</span> <span class="nav-text">自卑</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#gc-%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">GC 的条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gc-%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">GC 的机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gc-%E9%9C%80%E8%A6%81%E6%97%B6%E9%97%B4"><span class="nav-number">3.1.</span> <span class="nav-text">GC 需要时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gc-%E4%B8%8D%E8%83%BD%E9%87%8A%E6%94%BE%E6%89%80%E6%9C%89%E8%B5%84%E6%BA%90"><span class="nav-number">3.2.</span> <span class="nav-text">GC 不能释放所有资源</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -180,7 +182,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/29/%E8%9B%8B%E7%96%BC/">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -193,12 +195,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="蛋疼 | 布朗尼的小屋">
+      <meta itemprop="name" content="C# 垃圾回收 | 布朗尼的小屋">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          蛋疼
+          C# 垃圾回收
         </h1>
 
         <div class="post-meta-container">
@@ -208,15 +210,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2025-11-29 22:09:32" itemprop="dateCreated datePublished" datetime="2025-11-29T22:09:32+08:00">2025-11-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-11-30 00:44:25" itemprop="dateModified" datetime="2025-11-30T00:44:25+08:00">2025-11-30</time>
+      <time title="创建时间：2025-11-30 09:50:23 / 修改时间：11:14:07" itemprop="dateCreated datePublished" datetime="2025-11-30T09:50:23+08:00">2025-11-30</time>
     </span>
 
   
@@ -228,10 +224,63 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="一事无成">一事无成</h2>
-<p>我自从进入大学以来，已经过了大半学期。但自己什么都不会。</p>
-<h2 id="自卑">自卑</h2>
-<p>我经常会感到沮丧。总是会感觉自己在任何地方都做得很烂，即使别人做的比我还烂，但我也总会觉得别人的烂比我的烂更有含金量。</p>
+    <div class="post-body" itemprop="articleBody"><p>C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得
+free()
+手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage
+Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点
+C#。它当然有一套 GC 机制。</p>
+<h2 id="gc-的条件">GC 的条件</h2>
+<ol type="1">
+<li><p>内存不足。</p></li>
+<li><p>手动调用了 <code>GC.Collect</code> 方法：</p></li>
+</ol>
+<pre><code class="highlight csharp"><span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++)
+&#123;
+    <span class="keyword">var</span> temp = <span class="keyword">new</span> <span class="built_in">object</span>();
+&#125;
+<span class="comment">// 强制触发 GC</span>
+GC.Collect();</code></pre>
+<h2 id="gc-的机制">GC 的机制</h2>
+<p>GC
+先默认堆中的所有对象都是可以回收的，然后再标记哪些对象被引用（它们是可达/活动的），然后清除掉不可达的对象。</p>
+<p><code>GC.Collect()</code> 里面可以有参数，比如 0 就对应 Gen
+0。这是因为 Generational GC 的关系。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Gen 0</th>
+<th style="text-align: center;">Gen 1</th>
+<th style="text-align: center;">Gen 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">新创建的(小)</td>
+<td style="text-align: center;">Gen 0 回收后存活的</td>
+<td style="text-align: center;">长期存活的(大)</td>
+</tr>
+</tbody>
+</table>
+<p>当 Gen 0 堆中的内存达到某个阈值，则触发 Gen 0 GC，剩下的存活对象进入
+Gen 1；如果 Gen 1 的也达到阈值，则触发 Gen 1 GC，并且同时 Gen 0
+中的也再次回收一遍，存活的对象全部放入 Gen 2 的堆内存空间；Gen 2 GC
+则同时回收 0, 1, 2 三代的。</p>
+<h2 id="问题">问题</h2>
+<h3 id="gc-需要时间">GC 需要时间</h3>
+<p>假设在一个大型开放世界游戏内，玩家突然从一个点跑到距离很远的另一个点，那么旧的点周围的资产必须被卸载掉，否则会爆内存。</p>
+<figure>
+<img src="/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg" class="" title="大型开放世界">
+<figcaption>
+《荒野大镖客：救赎 2》
+</figcaption>
+</figure>
+<p>如果在这期间进行
+GC，游戏将面临十分严重的卡顿。解决方法就是黑屏加载，但是这相当影响观感，所以非传统的流式资产传输（Streaming
+Assets）应运而生，比如在《荒野大镖客：救赎
+2》这样的游戏里，使用外挂进行超速飞行，很难感觉到卡顿。</p>
+<h3 id="gc-不能释放所有资源">GC 不能释放所有资源</h3>
+<p>GC
+并不能释放非托管的资源，因为回收机制的一个前提就是它要回收的内存被分配在托管堆上。</p>
 
     </div>
 
@@ -241,18 +290,18 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E9%97%B2%E8%81%8A/" rel="tag"># 闲聊</a>
+              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
+                <a href="/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/" rel="prev" title="在 Apple Silicon 上原生运行《雷神之锤 3》">
+                  <i class="fa fa-angle-left"></i> 在 Apple Silicon 上原生运行《雷神之锤 3》
+                </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/11/29/To-do-list/" rel="next" title="To do list">
-                  To do list <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
