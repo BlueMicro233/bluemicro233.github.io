@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="前置工作  一份在 Windows 平台下载的原版 Quake III Arena 的游戏文件。 在 ioquake3.org&#x2F;get-it&#x2F; 下载一份基于 Universal 2 Build 的 macOS build 文件。 在 ioquake3.org&#x2F;extras&#x2F;patch-data 下载一个 zip 文件（将自动解压为 quake3-latest-pk3s 文件夹）。">
+    <meta name="description" content="前置工作 一份在 Windows 平台下载的原版 Quake III Arena 的游戏文件。   在 ioquake3.org&#x2F;get-it&#x2F; 下载一份基于 Universal 2 Build 的 macOS build 文件。  在 ioquake3.org&#x2F;extras&#x2F;patch-data 下载一个 zip 文件（将自动解压为 quake3-latest-pk3s 文件夹）。   这两个部">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Apple Silicon 上原生运行《雷神之锤 3》">
 <meta property="og:url" content="https://bluemicro233.github.io/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/index.html">
 <meta property="og:site_name" content="布朗尼的小屋">
-<meta property="og:description" content="前置工作  一份在 Windows 平台下载的原版 Quake III Arena 的游戏文件。 在 ioquake3.org&#x2F;get-it&#x2F; 下载一份基于 Universal 2 Build 的 macOS build 文件。 在 ioquake3.org&#x2F;extras&#x2F;patch-data 下载一个 zip 文件（将自动解压为 quake3-latest-pk3s 文件夹）。">
+<meta property="og:description" content="前置工作 一份在 Windows 平台下载的原版 Quake III Arena 的游戏文件。   在 ioquake3.org&#x2F;get-it&#x2F; 下载一份基于 Universal 2 Build 的 macOS build 文件。  在 ioquake3.org&#x2F;extras&#x2F;patch-data 下载一个 zip 文件（将自动解压为 quake3-latest-pk3s 文件夹）。   这两个部">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-11-29T15:19:19.000Z">
 <meta property="article:modified_time" content="2025-11-30T02:56:12.848Z">
@@ -63,12 +63,6 @@
   
 
 
-
-
-  
-
-  <script class="next-config" data-name="enableMath" type="application/json">false</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","cdn":"//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
-<script src="/js/third-party/math/mathjax.js" defer></script>
 
 
 
@@ -134,7 +128,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">前置工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">进一步配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%92%88%E5%AF%B9-macos-26-%E6%B2%A1%E6%9C%89%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">针对 macOS 26 没有声音的问题</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">前置工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">进一步配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%92%88%E5%AF%B9-macOS-26-%E6%B2%A1%E6%9C%89%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.</span> <span class="nav-text">针对 macOS 26 没有声音的问题</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -147,13 +141,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -228,30 +222,27 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="前置工作">前置工作</h2>
-<ol type="1">
-<li><p>一份在 Windows 平台下载的原版 Quake III Arena
-的游戏文件。</p></li>
-<li><p>在 ioquake3.org/get-it/ 下载一份<strong>基于 Universal 2
-Build</strong> 的 macOS build 文件。</p></li>
-<li><p>在 ioquake3.org/extras/patch-data 下载一个 zip 文件（将自动解压为
-quake3-latest-pk3s 文件夹）。</p></li>
+    <div class="post-body" itemprop="articleBody"><h2 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a>前置工作</h2><ol>
+<li><p>一份在 Windows 平台下载的原版 Quake III Arena 的游戏文件。 </p>
+</li>
+<li><p>在 ioquake3.org/get-it/ 下载一份<strong>基于 Universal 2 Build</strong> 的 macOS build 文件。</p>
+</li>
+<li><p>在 ioquake3.org/extras/patch-data 下载一个 zip 文件（将自动解压为 quake3-latest-pk3s 文件夹）。</p>
+</li>
 </ol>
 <p>这两个部分准备好了，就可以正式安装了。</p>
-<h2 id="安装">安装</h2>
-<ol type="1">
-<li><p>在“应用程序”文件夹中创建一个名为 ioquake3 的文件夹。</p></li>
-<li><p>将下载的文件（ioquake3.app）移动到刚刚创建的 ioquake3
-文件夹内。</p></li>
-<li><p>把下载的 quake3-latest-pk3s 文件夹内的两个文件夹解压至 ioquake3
-文件夹内。</p></li>
-<li><p>把 Windows 上的 pak0.pk3 资产文件复制下来，并且转移到 mac
-上。</p></li>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li><p>在“应用程序”文件夹中创建一个名为 ioquake3 的文件夹。</p>
+</li>
+<li><p>将下载的文件（ioquake3.app）移动到刚刚创建的 ioquake3 文件夹内。</p>
+</li>
+<li><p>把下载的 quake3-latest-pk3s 文件夹内的两个文件夹解压至 ioquake3 文件夹内。</p>
+</li>
+<li><p>把 Windows 上的 pak0.pk3 资产文件复制下来，并且转移到 mac 上。</p>
+</li>
 </ol>
-<h2 id="进一步配置">进一步配置</h2>
-<p>运行 ioquake3 进入游戏，它会提示输入 CD-KEY，可以直接回车键跳过。</p>
-<p>此时，屏幕分辨率是个问题，并且有人可能还不在全屏模式，需要在控制台调整。<strong>id
-tech 引擎呼出控制台为 <code>~</code> 键。</strong></p>
+<h2 id="进一步配置"><a href="#进一步配置" class="headerlink" title="进一步配置"></a>进一步配置</h2><p>运行 ioquake3 进入游戏，它会提示输入 CD-KEY，可以直接回车键跳过。</p>
+<p>此时，屏幕分辨率是个问题，并且有人可能还不在全屏模式，需要在控制台调整。<strong>id tech 引擎呼出控制台为 <code>~</code> 键。</strong></p>
 <p>我的 MacBook Air 的分辨率是 2560*1664，所以逐个输入以下指令：</p>
 <p><code>/r_mode -1</code></p>
 <p><code>/r_customheight 1664</code></p>
@@ -260,12 +251,8 @@ tech 引擎呼出控制台为 <code>~</code> 键。</strong></p>
 <p><code>/vid_restart</code></p>
 <p>并且还需要进入全屏模式，所以需要输入：</p>
 <p><code>/r_fullscreen 1</code></p>
-<p>至此，游戏配置就差不多了。我们还可以在自带的 SYSTEM
-设置里设置画质，例如纹理过滤模式、光照模式、几何细节等等。</p>
-<h2 id="针对-macos-26-没有声音的问题">针对 macOS 26 没有声音的问题</h2>
-<p>在 macOS 26 上运行具有 OpenAL
-音频库的程序存在兼容性问题，于是游戏无法正常播放声音。解决方法也很简单，只需输入以下指令禁用
-OpenAL 库并应用：</p>
+<p>至此，游戏配置就差不多了。我们还可以在自带的 SYSTEM 设置里设置画质，例如纹理过滤模式、光照模式、几何细节等等。</p>
+<h2 id="针对-macOS-26-没有声音的问题"><a href="#针对-macOS-26-没有声音的问题" class="headerlink" title="针对 macOS 26 没有声音的问题"></a>针对 macOS 26 没有声音的问题</h2><p>在 macOS 26 上运行具有 OpenAL 音频库的程序存在兼容性问题，于是游戏无法正常播放声音。解决方法也很简单，只需输入以下指令禁用 OpenAL 库并应用：</p>
 <p><code>/s_useOpenAL 0</code></p>
 <p><code>/snd_restart</code></p>
 
