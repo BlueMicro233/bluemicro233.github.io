@@ -250,7 +250,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -278,6 +278,202 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/12/03/%E5%B9%B6%E8%A1%8C%E5%8C%96%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="布朗尼蛋糕">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="布朗尼的小屋">
+      <meta itemprop="description" content="闲人">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 布朗尼的小屋">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/12/03/%E5%B9%B6%E8%A1%8C%E5%8C%96%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B/" class="post-title-link" itemprop="url">并行化蒙特卡洛</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-03 21:41:13" itemprop="dateCreated datePublished" datetime="2025-12-03T21:41:13+08:00">2025-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-04 00:33:40" itemprop="dateModified" datetime="2025-12-04T00:33:40+08:00">2025-12-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="测量-CPU-时间"><a href="#测量-CPU-时间" class="headerlink" title="测量 CPU 时间"></a>测量 CPU 时间</h2><p>上篇文章写了个简单的蒙特卡洛估计器，用于估计 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.29ex" height="1ex" role="img" focusable="false" viewBox="0 -431 570 442"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D70B" d="M132 -11Q98 -11 98 22V33L111 61Q186 219 220 334L228 358H196Q158 358 142 355T103 336Q92 329 81 318T62 297T53 285Q51 284 38 284Q19 284 19 294Q19 300 38 329T93 391T164 429Q171 431 389 431Q549 431 553 430Q573 423 573 402Q573 371 541 360Q535 358 472 358H408L405 341Q393 269 393 222Q393 170 402 129T421 65T431 37Q431 20 417 5T381 -10Q370 -10 363 -7T347 17T331 77Q330 86 330 121Q330 170 339 226T357 318T367 358H269L268 354Q268 351 249 275T206 114T175 17Q164 -11 132 -11Z"></path></g></g></g></svg></mjx-container> 的值，但是那个非常慢，可以通过 <code>System.Diagnostics</code> 提供的 <code>Stopwatch()</code> 方法算一下时间。</p>
+<pre><code class="highlight csharp"><span class="keyword">var</span> watch = <span class="keyword">new</span> Stopwatch();
+
+stopwatch.Start();
+
+<span class="keyword">for</span> (<span class="built_in">ulong</span> i = <span class="number">0</span>; i &lt; N; i++)
+{
+    x = rnd.NextDouble();
+    y = rnd.NextDouble();
+    <span class="keyword">if</span> (x * x + y * y &lt;= <span class="number">1</span>)
+    {
+        circleCount++;
+    }
+}
+<span class="built_in">double</span> PI = <span class="number">4</span> * (<span class="built_in">double</span>)circleCount / N;
+
+watch.Stop();
+
+Console.WriteLine(<span class="string">"Pi = {0}, time = {1}ms"</span>, PI，watch.ElapsedMilliseconds);</code></pre>
+<p>设置采样数为 <code>5000000000</code>，得到 <code>Pi = 3.1415527664, time = 37026ms</code>。为了计算这个稳定于 3.1415 以上的结果，花费了 37 秒。</p>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>现代 CPU 具有多个物理核心，可以把它们利用起来。用 <code>ThreadLocal&lt;Random&gt;()</code> 为各个线程单独生成随机数。</p>
+<pre><code class="highlight csharp"><span class="keyword">using</span> System.Threading;
+<span class="keyword">using</span> System.Threading.Tasks;
+
+<span class="function"><span class="keyword">void</span> <span class="title">ParallelEst</span>()</span>
+{
+    <span class="comment">// 全局计数器</span>
+    <span class="built_in">long</span> totalCircleCount = <span class="number">0</span>;
+
+    <span class="keyword">var</span> watch = <span class="keyword">new</span> Stopwatch();
+    ThreadLocal&lt;Random&gt; threadRnd = <span class="keyword">new</span> ThreadLocal&lt;Random&gt;(() =&gt; <span class="keyword">new</span> Random(Guid.NewGuid().GetHashCode()));    <span class="comment">//各线程通过唯一 GUID 生成哈希值，防止随机样本序列重复</span>
+
+    watch.Start();
+
+    <span class="comment">// 循环并行化</span>
+    Parallel.For(
+        <span class="number">0</span>,
+        (<span class="built_in">long</span>)N,
+        () =&gt; <span class="number">0U</span>L,
+        (i, loopState, localCount) =&gt;   <span class="comment">// i: 当前迭代，localCount: 当前线程的局部计数器</span>
+        {
+            Random rnd = threadRnd.Value;
+            <span class="built_in">double</span> x = rnd.NextDouble();
+            <span class="built_in">double</span> y = rnd.NextDouble();
+    
+            <span class="keyword">if</span> (x * x + y * y &lt;= <span class="number">1</span>)
+            {
+                localCount++;
+            }
+            <span class="keyword">return</span> localCount; 
+        },
+        localCount =&gt;  <span class="comment">// 累积局部计数器到全局计数器</span>
+        {
+            Interlocked.Add(<span class="keyword">ref</span> totalCircleCount, (<span class="built_in">long</span>)localCount);
+        }
+    );
+
+    threadRnd.Dispose();
+
+    <span class="built_in">double</span> PI = <span class="number">4</span> * (<span class="built_in">double</span>)totalCircleCount / N;
+
+    watch.Stop();
+
+    Console.WriteLine(<span class="string">"Pi = {0}, time = {1}ms"</span>, PI, watch.ElapsedMilliseconds);
+}</code></pre>
+<p>以下是运行时间：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">1 线程</th>
+<th style="text-align:center">24 线程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">36412 ms</td>
+<td style="text-align:center">6348 ms</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>多线程的确占用起来了：</p>
+<figure>
+  
+  <figcaption>taskmgr</figcaption>
+</figure>
+
+<h2 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h2><p>之前是这么写的，结果并行化反而慢了 10 倍：</p>
+<pre><code class="highlight csharp"><span class="function"><span class="keyword">void</span> <span class="title">ParallelEst</span>()</span>
+{
+    <span class="built_in">ulong</span> circleCount = <span class="number">0</span>;
+    
+    <span class="keyword">var</span> watch = <span class="keyword">new</span> Stopwatch();
+    
+    ThreadLocal&lt;Random&gt; threadRnd = <span class="keyword">new</span> ThreadLocal&lt;Random&gt;(() =&gt; <span class="keyword">new</span> Random(Guid.NewGuid().GetHashCode()));
+    
+    watch.Start();
+    
+    Parallel.For(<span class="number">0</span>, (<span class="built_in">long</span>)N, i =&gt;
+    {
+        Random rnd = threadRnd.Value;
+        <span class="built_in">double</span> x = rnd.NextDouble();
+        <span class="built_in">double</span> y = rnd.NextDouble();
+
+        <span class="keyword">if</span> (x * x + y * y &lt;= <span class="number">1</span>)
+        {
+            Interlocked.Increment(<span class="keyword">ref</span> circleCount); <span class="comment">// 锁在线程循环里面</span>
+        }
+    });
+    
+    threadRnd.Dispose();
+    
+    <span class="built_in">double</span> PI = <span class="number">4</span> * (<span class="built_in">double</span>)circleCount / N;
+    
+    watch.Stop();
+    
+    Console.WriteLine(<span class="string">"Pi = {0}, time = {1}ms"</span>, PI, watch.ElapsedMilliseconds);
+}</code></pre>
+<p>原因是每个线程每次累计一次 <code>circleCount</code> 都要调用一次 <code>Interlocked</code> 方法，导致线程之间产生锁竞争，大幅降低并发性能。</p>
+<p>修复方案就是给单个线程分配一个局部的计数器 <code>localCount</code>，等各线程累计结束之后再调用原子操作。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
