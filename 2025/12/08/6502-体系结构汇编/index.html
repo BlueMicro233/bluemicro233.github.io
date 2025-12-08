@@ -19,27 +19,27 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="闲人">
+    <meta name="description" content="6502 是什么6502 由 MOS Technology 于 1975 年发布的一款 8 位微处理器，流行于上世纪七八十年代的大部分家用 PC。 苹果 I&#x2F;II, Commodore 64, 任天堂 NES&#x2F;FC 游戏主机（后来的 SNES&#x2F;SFC 主机也只是 6502 的 16 位扩展）等现象级家用机平台都基于 6502 体系结构。 项目easy6502 有助于快速上手 6502 体系结构的汇">
 <meta property="og:type" content="article">
-<meta property="og:title" content="6502 体系结构模拟器">
-<meta property="og:url" content="https://bluemicro233.github.io/2025/12/05/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A8%A1%E6%8B%9F%E5%99%A8/index.html">
+<meta property="og:title" content="6502 体系结构">
+<meta property="og:url" content="https://bluemicro233.github.io/2025/12/08/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%B1%87%E7%BC%96/index.html">
 <meta property="og:site_name" content="布朗尼的小屋">
-<meta property="og:description" content="闲人">
+<meta property="og:description" content="6502 是什么6502 由 MOS Technology 于 1975 年发布的一款 8 位微处理器，流行于上世纪七八十年代的大部分家用 PC。 苹果 I&#x2F;II, Commodore 64, 任天堂 NES&#x2F;FC 游戏主机（后来的 SNES&#x2F;SFC 主机也只是 6502 的 16 位扩展）等现象级家用机平台都基于 6502 体系结构。 项目easy6502 有助于快速上手 6502 体系结构的汇">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-05T11:48:27.000Z">
-<meta property="article:modified_time" content="2025-12-05T11:48:27.893Z">
+<meta property="article:published_time" content="2025-12-08T04:07:16.000Z">
+<meta property="article:modified_time" content="2025-12-08T06:27:29.232Z">
 <meta property="article:author" content="布朗尼蛋糕">
-<meta property="article:tag" content="技术, 哲学, 学习, 生活">
+<meta property="article:tag" content="技术">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://bluemicro233.github.io/2025/12/05/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A8%A1%E6%8B%9F%E5%99%A8/">
+<link rel="canonical" href="https://bluemicro233.github.io/2025/12/08/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%B1%87%E7%BC%96/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://bluemicro233.github.io/2025/12/05/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A8%A1%E6%8B%9F%E5%99%A8/","path":"2025/12/05/6502-体系结构模拟器/","title":"6502 体系结构模拟器"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://bluemicro233.github.io/2025/12/08/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%B1%87%E7%BC%96/","path":"2025/12/08/6502-体系结构汇编/","title":"6502 体系结构"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>6502 体系结构模拟器 | 布朗尼的小屋</title>
+<title>6502 体系结构 | 布朗尼的小屋</title>
   
 
 
@@ -115,7 +115,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -128,6 +128,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#6502-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">6502 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">项目</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -178,7 +179,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/12/05/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%A8%A1%E6%8B%9F%E5%99%A8/">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/12/08/6502-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E6%B1%87%E7%BC%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -191,12 +192,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="6502 体系结构模拟器 | 布朗尼的小屋">
+      <meta itemprop="name" content="6502 体系结构 | 布朗尼的小屋">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          6502 体系结构模拟器
+          6502 体系结构
         </h1>
 
         <div class="post-meta-container">
@@ -206,8 +207,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2025-12-05 19:48:27" itemprop="dateCreated datePublished" datetime="2025-12-05T19:48:27+08:00">2025-12-05</time>
+      <time title="创建时间：2025-12-08 12:07:16 / 修改时间：14:27:29" itemprop="dateCreated datePublished" datetime="2025-12-08T12:07:16+08:00">2025-12-08</time>
     </span>
 
   
@@ -219,7 +221,11 @@
     
     
     
-    <div class="post-body" itemprop="articleBody">
+    <div class="post-body" itemprop="articleBody"><h2 id="6502-是什么"><a href="#6502-是什么" class="headerlink" title="6502 是什么"></a>6502 是什么</h2><p>6502 由 MOS Technology 于 1975 年发布的一款 8 位微处理器，流行于上世纪七八十年代的大部分家用 PC。</p>
+<p>苹果 I/II, Commodore 64, 任天堂 NES/FC 游戏主机（后来的 SNES/SFC 主机也只是 6502 的 16 位扩展）等现象级家用机平台都基于 6502 体系结构。</p>
+<h2 id="项目"><a href="#项目" class="headerlink" title="项目"></a>项目</h2><p>easy6502 有助于快速上手 6502 体系结构的汇编语言，链接为 <a target="_blank" rel="noopener" href="https://github.com/skilldrick/easy6502">https://github.com/skilldrick/easy6502</a> 。</p>
+<p>TODO：汉化</p>
+
     </div>
 
     
@@ -227,6 +233,9 @@
     
 
     <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
+          </div>
 
         
 
@@ -286,7 +295,7 @@
 </noscript>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"BlueMicro233","repo":"bluemicro233.github.io","client_id":"Ov23licY9t9BIXN9ZVWh","client_secret":"9db26c71243713feada3379ef8cccc05ac282224","admin_user":"BlueMicro233","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","perPage":10,"pagerDirection":"last","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"3635a95e92e4955be13c87d73ded251c"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"BlueMicro233","repo":"bluemicro233.github.io","client_id":"Ov23licY9t9BIXN9ZVWh","client_secret":"9db26c71243713feada3379ef8cccc05ac282224","admin_user":"BlueMicro233","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","perPage":10,"pagerDirection":"last","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"e9141e6ae80e3b809c1ea3e741488a8a"}</script>
 <script src="/js/third-party/comments/gitalk.js" defer></script>
 </body>
 </html>
