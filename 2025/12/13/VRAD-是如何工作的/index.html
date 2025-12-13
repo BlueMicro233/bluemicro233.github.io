@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="引入八年前，有人尝试优化 VRAD（Valve Radiosity，起源引擎的 GI 烘焙器）的速度，但是不了了之，留下了一篇探索性质的研究文章：https:&#x2F;&#x2F;github.com&#x2F;BlueMicro233&#x2F;modern-vrad Issues 上作者的原话： This was only ever really a research idea - as interesting and excit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VRAD 是如何工作的">
+<meta property="og:url" content="https://bluemicro233.github.io/2025/12/13/VRAD-%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/index.html">
+<meta property="og:site_name" content="布朗尼的小屋">
+<meta property="og:description" content="引入八年前，有人尝试优化 VRAD（Valve Radiosity，起源引擎的 GI 烘焙器）的速度，但是不了了之，留下了一篇探索性质的研究文章：https:&#x2F;&#x2F;github.com&#x2F;BlueMicro233&#x2F;modern-vrad Issues 上作者的原话： This was only ever really a research idea - as interesting and excit">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-13T04:37:24.000Z">
+<meta property="article:modified_time" content="2025-12-13T07:10:40.715Z">
+<meta property="article:author" content="布朗尼蛋糕">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="技术">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://bluemicro233.github.io/2025/12/13/VRAD-%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://bluemicro233.github.io/2025/12/13/VRAD-%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/","path":"2025/12/13/VRAD-是如何工作的/","title":"VRAD 是如何工作的"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>VRAD 是如何工作的 | 布朗尼的小屋</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">布朗尼的小屋</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-links"><a href="/links/" rel="section"><i class="fa-link fa-fw"></i>友链</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E5%85%A5"><span class="nav-number">1.</span> <span class="nav-text">引入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A0%E9%80%9F-VRAD-%E9%9A%BE%E5%90%97"><span class="nav-number">2.</span> <span class="nav-text">加速 VRAD 难吗</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VRAD-%E4%BB%8B%E7%BB%8D"><span class="nav-number">3.</span> <span class="nav-text">VRAD 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">核心算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">5.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E5%89%B2-quot-Chop-quot"><span class="nav-number">5.1.</span> <span class="nav-text">切割 - &quot;Chop&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8F%E7%BA%B9%E7%90%86-quot-Macro-Texture-quot"><span class="nav-number">5.2.</span> <span class="nav-text">宏纹理 - &quot;Macro Texture&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E7%89%87-quot-Patch-quot"><span class="nav-number">5.3.</span> <span class="nav-text">面片 - &quot;Patch&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B7%E6%9C%AC-quot-Sample-quot"><span class="nav-number">5.4.</span> <span class="nav-text">样本 - &quot;Sample&quot;</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%89%E7%85%A7%E5%80%BC-quot-Lighting-value-quot"><span class="nav-number">5.5.</span> <span class="nav-text">光照值 - &quot;Lighting value&quot;</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VRAD-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">6.</span> <span class="nav-text">VRAD 数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dworldlight-t-bspfile-h-966"><span class="nav-number">6.1.</span> <span class="nav-text">dworldlight_t (bspfile.h:966)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#directlight-t-vrad-h-66"><span class="nav-number">6.2.</span> <span class="nav-text">directlight_t (vrad.h:66)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CPatch-vrad-h-186"><span class="nav-number">6.3.</span> <span class="nav-text">CPatch (vrad.h:186)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BSP-%E6%A0%BC%E5%BC%8F"><span class="nav-number">7.</span> <span class="nav-text">BSP 格式</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">布朗尼蛋糕</p>
+  <div class="site-description" itemprop="description">闲人</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">文章</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/BlueMicro233" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;BlueMicro233" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/12/13/VRAD-%E6%98%AF%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="布朗尼蛋糕">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="布朗尼的小屋">
+      <meta itemprop="description" content="闲人">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="VRAD 是如何工作的 | 布朗尼的小屋">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          VRAD 是如何工作的
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-12-13 12:37:24 / 修改时间：15:10:40" itemprop="dateCreated datePublished" datetime="2025-12-13T12:37:24+08:00">2025-12-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="引入"><a href="#引入" class="headerlink" title="引入"></a>引入</h1><p>八年前，有人尝试优化 VRAD（Valve Radiosity，起源引擎的 GI 烘焙器）的速度，但是不了了之，留下了一篇探索性质的研究文章：<a target="_blank" rel="noopener" href="https://github.com/BlueMicro233/modern-vrad">https://github.com/BlueMicro233/modern-vrad</a></p>
+<p>Issues 上作者的原话：</p>
+<p><em>This was only ever really a research idea - as interesting and exciting as it would be, I never got into it enough to make it a thing. Parallelisable lighting algorithms seem to be a whole area to themselves, and I don't have the time between the other projects I do to actually make any inroads on this.</em></p>
+<p><strong>这始终只是个研究构想——尽管它充满趣味且令人兴奋，但我从未深入到足以将其付诸实践的程度。并行化光照算法似乎自成一个独立领域，而我忙于其他项目，实在是抽不出时间在这方面取得实质性进展。</strong></p>
+<h1 id="加速-VRAD-难吗"><a href="#加速-VRAD-难吗" class="headerlink" title="加速 VRAD 难吗"></a>加速 VRAD 难吗</h1><p>首先 VRAD 本身就是一个体量不小的工程，其次是完全理解把握 VRAD 算法原理除了计算机科学的知识，还要有一定的微积分、线性代数和辐射传热学的功底。如果要</p>
+<p>本文将较少涉及理论，大部分聚焦于 VRAD 系统本身的实现思路。对于 VRAD 涉及的光传输方程推导、有限元方法和辐射度线性方程组的理论，可参考我在知乎上发的这篇文章： <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/13399880275">起源引擎的光照（上）</a>。</p>
+<p>原文或多或少地有些错误，本文已进行调整。本文是我自己的 modern-vrad 项目的起点。</p>
+<h1 id="VRAD-介绍"><a href="#VRAD-介绍" class="headerlink" title="VRAD 介绍"></a>VRAD 介绍</h1><p>辐射度算法通常通过将场景划分为 <strong>面片（Patch）</strong> 来实现，面片是具有均匀照明的区域，它是明暗过渡的最小单位。在起源引擎和 VRAD 的体系下，单个面片可视为光照贴图中的单个像素，对应 luxel 的概念。</p>
+<p>需注意某些算法会对面片进行细分（即拆分为更小单元），当判断增加密度更好时便会执行此操作：为了使表面上投射出更锐利、更少方块感的阴影，该表面就应被划分为更多面片。</p>
+<p>面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 的辐射度可表示为：</p>
+<div>
+<mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -3.006ex;" xmlns="http://www.w3.org/2000/svg" width="23.632ex" height="5.155ex" role="img" focusable="false" viewBox="0 -950 10445.2 2278.6"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D435" d="M231 637Q204 637 199 638T194 649Q194 676 205 682Q206 683 335 683Q594 683 608 681Q671 671 713 636T756 544Q756 480 698 429T565 360L555 357Q619 348 660 311T702 219Q702 146 630 78T453 1Q446 0 242 0Q42 0 39 2Q35 5 35 10Q35 17 37 24Q42 43 47 45Q51 46 62 46H68Q95 46 128 49Q142 52 147 61Q150 65 219 339T288 628Q288 635 231 637ZM649 544Q649 574 634 600T585 634Q578 636 493 637Q473 637 451 637T416 636H403Q388 635 384 626Q382 622 352 506Q352 503 351 500L320 374H401Q482 374 494 376Q554 386 601 434T649 544ZM595 229Q595 273 572 302T512 336Q506 337 429 337Q311 337 310 336Q310 334 293 263T258 122L240 52Q240 48 252 48T333 46Q422 46 429 47Q491 54 543 105T595 229Z"></path></g><g data-mml-node="mi" transform="translate(792,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(1363.7,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="msub" transform="translate(2419.5,0)"><g data-mml-node="mi"><path data-c="1D438" d="M492 213Q472 213 472 226Q472 230 477 250T482 285Q482 316 461 323T364 330H312Q311 328 277 192T243 52Q243 48 254 48T334 46Q428 46 458 48T518 61Q567 77 599 117T670 248Q680 270 683 272Q690 274 698 274Q718 274 718 261Q613 7 608 2Q605 0 322 0H133Q31 0 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H757Q764 676 764 669Q764 664 751 557T737 447Q735 440 717 440H705Q698 445 698 453L701 476Q704 500 704 528Q704 558 697 578T678 609T643 625T596 632T532 634H485Q397 633 392 631Q388 629 386 622Q385 619 355 499T324 377Q347 376 372 376H398Q464 376 489 391T534 472Q538 488 540 490T557 493Q562 493 565 493T570 492T572 491T574 487T577 483L544 351Q511 218 508 216Q505 213 492 213Z"></path></g><g data-mml-node="mi" transform="translate(771,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="mo" transform="translate(3706.7,0)"><path data-c="2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path></g><g data-mml-node="msub" transform="translate(4706.9,0)"><g data-mml-node="mi"><path data-c="1D70C" d="M58 -216Q25 -216 23 -186Q23 -176 73 26T127 234Q143 289 182 341Q252 427 341 441Q343 441 349 441T359 442Q432 442 471 394T510 276Q510 219 486 165T425 74T345 13T266 -10H255H248Q197 -10 165 35L160 41L133 -71Q108 -168 104 -181T92 -202Q76 -216 58 -216ZM424 322Q424 359 407 382T357 405Q322 405 287 376T231 300Q217 269 193 170L176 102Q193 26 260 26Q298 26 334 62Q367 92 389 158T418 266T424 322Z"></path></g><g data-mml-node="mi" transform="translate(550,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g><g data-mml-node="munder" transform="translate(5717.5,0)"><g data-mml-node="mo"><path data-c="2211" d="M60 948Q63 950 665 950H1267L1325 815Q1384 677 1388 669H1348L1341 683Q1320 724 1285 761Q1235 809 1174 838T1033 881T882 898T699 902H574H543H251L259 891Q722 258 724 252Q725 250 724 246Q721 243 460 -56L196 -356Q196 -357 407 -357Q459 -357 548 -357T676 -358Q812 -358 896 -353T1063 -332T1204 -283T1307 -196Q1328 -170 1348 -124H1388Q1388 -125 1381 -145T1356 -210T1325 -294L1267 -449L666 -450Q64 -450 61 -448Q55 -446 55 -439Q55 -437 57 -433L590 177Q590 178 557 222T452 366T322 544L56 909L55 924Q55 945 60 948Z"></path></g><g data-mml-node="TeXAtom" transform="translate(576.3,-1084.4) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g><g data-mml-node="msub" transform="translate(7328.2,0)"><g data-mml-node="mi"><path data-c="1D435" d="M231 637Q204 637 199 638T194 649Q194 676 205 682Q206 683 335 683Q594 683 608 681Q671 671 713 636T756 544Q756 480 698 429T565 360L555 357Q619 348 660 311T702 219Q702 146 630 78T453 1Q446 0 242 0Q42 0 39 2Q35 5 35 10Q35 17 37 24Q42 43 47 45Q51 46 62 46H68Q95 46 128 49Q142 52 147 61Q150 65 219 339T288 628Q288 635 231 637ZM649 544Q649 574 634 600T585 634Q578 636 493 637Q473 637 451 637T416 636H403Q388 635 384 626Q382 622 352 506Q352 503 351 500L320 374H401Q482 374 494 376Q554 386 601 434T649 544ZM595 229Q595 273 572 302T512 336Q506 337 429 337Q311 337 310 336Q310 334 293 263T258 122L240 52Q240 48 252 48T333 46Q422 46 429 47Q491 54 543 105T595 229Z"></path></g><g data-mml-node="mi" transform="translate(792,-150) scale(0.707)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g><g data-mml-node="mo" transform="translate(8683.7,0)"><path data-c="22C5" d="M78 250Q78 274 95 292T138 310Q162 310 180 294T199 251Q199 226 182 208T139 190T96 207T78 250Z"></path></g><g data-mml-node="msub" transform="translate(9184,0)"><g data-mml-node="mi"><path data-c="1D439" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path></g><g data-mml-node="TeXAtom" transform="translate(676,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(345,0)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></g></g></svg></mjx-container>
+</div>
+
+<ul>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.357ex;" xmlns="http://www.w3.org/2000/svg" width="2.457ex" height="1.902ex" role="img" focusable="false" viewBox="0 -683 1086 840.8"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D435" d="M231 637Q204 637 199 638T194 649Q194 676 205 682Q206 683 335 683Q594 683 608 681Q671 671 713 636T756 544Q756 480 698 429T565 360L555 357Q619 348 660 311T702 219Q702 146 630 78T453 1Q446 0 242 0Q42 0 39 2Q35 5 35 10Q35 17 37 24Q42 43 47 45Q51 46 62 46H68Q95 46 128 49Q142 52 147 61Q150 65 219 339T288 628Q288 635 231 637ZM649 544Q649 574 634 600T585 634Q578 636 493 637Q473 637 451 637T416 636H403Q388 635 384 626Q382 622 352 506Q352 503 351 500L320 374H401Q482 374 494 376Q554 386 601 434T649 544ZM595 229Q595 273 572 302T512 336Q506 337 429 337Q311 337 310 336Q310 334 293 263T258 122L240 52Q240 48 252 48T333 46Q422 46 429 47Q491 54 543 105T595 229Z"></path></g><g data-mml-node="mi" transform="translate(792,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></g></svg></mjx-container> 是面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 的辐射度</li>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.357ex;" xmlns="http://www.w3.org/2000/svg" width="2.409ex" height="1.895ex" role="img" focusable="false" viewBox="0 -680 1065 837.8"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D438" d="M492 213Q472 213 472 226Q472 230 477 250T482 285Q482 316 461 323T364 330H312Q311 328 277 192T243 52Q243 48 254 48T334 46Q428 46 458 48T518 61Q567 77 599 117T670 248Q680 270 683 272Q690 274 698 274Q718 274 718 261Q613 7 608 2Q605 0 322 0H133Q31 0 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H757Q764 676 764 669Q764 664 751 557T737 447Q735 440 717 440H705Q698 445 698 453L701 476Q704 500 704 528Q704 558 697 578T678 609T643 625T596 632T532 634H485Q397 633 392 631Q388 629 386 622Q385 619 355 499T324 377Q347 376 372 376H398Q464 376 489 391T534 472Q538 488 540 490T557 493Q562 493 565 493T570 492T572 491T574 487T577 483L544 351Q511 218 508 216Q505 213 492 213Z"></path></g><g data-mml-node="mi" transform="translate(771,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></g></svg></mjx-container> 是面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 的自发光能量（如果只是反射，没有自发光，那么该项的值为 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="1.557ex" role="img" focusable="false" viewBox="0 -666 500 688"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g></g></svg></mjx-container>）</li>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.489ex;" xmlns="http://www.w3.org/2000/svg" width="1.909ex" height="1.489ex" role="img" focusable="false" viewBox="0 -442 844 658"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D70C" d="M58 -216Q25 -216 23 -186Q23 -176 73 26T127 234Q143 289 182 341Q252 427 341 441Q343 441 349 441T359 442Q432 442 471 394T510 276Q510 219 486 165T425 74T345 13T266 -10H255H248Q197 -10 165 35L160 41L133 -71Q108 -168 104 -181T92 -202Q76 -216 58 -216ZM424 322Q424 359 407 382T357 405Q322 405 287 376T231 300Q217 269 193 170L176 102Q193 26 260 26Q298 26 334 62Q367 92 389 158T418 266T424 322Z"></path></g><g data-mml-node="mi" transform="translate(550,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></g></svg></mjx-container> 是面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 的反照率（Albedo）, 也就是光能从面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 上反弹出去还剩多少能量的比例（同时也是该处的漫反射纹理颜色），它是一个大小介于 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="1.557ex" role="img" focusable="false" viewBox="0 -666 500 688"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g></g></svg></mjx-container> 到 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="1.507ex" role="img" focusable="false" viewBox="0 -666 500 666"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg></mjx-container> 之间的 RGB 值</li>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.972ex;" xmlns="http://www.w3.org/2000/svg" width="3.236ex" height="2.669ex" role="img" focusable="false" viewBox="0 -750 1430.3 1179.6"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="munder"><g data-mml-node="mo"><path data-c="2211" d="M61 748Q64 750 489 750H913L954 640Q965 609 976 579T993 533T999 516H979L959 517Q936 579 886 621T777 682Q724 700 655 705T436 710H319Q183 710 183 709Q186 706 348 484T511 259Q517 250 513 244L490 216Q466 188 420 134T330 27L149 -187Q149 -188 362 -188Q388 -188 436 -188T506 -189Q679 -189 778 -162T936 -43Q946 -27 959 6H999L913 -249L489 -250Q65 -250 62 -248Q56 -246 56 -239Q56 -234 118 -161Q186 -81 245 -11L428 206Q428 207 242 462L57 717L56 728Q56 744 61 748Z"></path></g><g data-mml-node="TeXAtom" transform="translate(1089,-285.4) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></g></g></svg></mjx-container> 是面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.462ex;" xmlns="http://www.w3.org/2000/svg" width="0.932ex" height="1.957ex" role="img" focusable="false" viewBox="0 -661 412 865"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></svg></mjx-container> 抵达面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 的能量之和（<strong><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.462ex;" xmlns="http://www.w3.org/2000/svg" width="0.932ex" height="1.957ex" role="img" focusable="false" viewBox="0 -661 412 865"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></svg></mjx-container> 实际上表示的是一组面片，即场景中除了面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 之外的所有面片</strong>）</li>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.666ex;" xmlns="http://www.w3.org/2000/svg" width="2.564ex" height="2.211ex" role="img" focusable="false" viewBox="0 -683 1133.3 977.2"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D435" d="M231 637Q204 637 199 638T194 649Q194 676 205 682Q206 683 335 683Q594 683 608 681Q671 671 713 636T756 544Q756 480 698 429T565 360L555 357Q619 348 660 311T702 219Q702 146 630 78T453 1Q446 0 242 0Q42 0 39 2Q35 5 35 10Q35 17 37 24Q42 43 47 45Q51 46 62 46H68Q95 46 128 49Q142 52 147 61Q150 65 219 339T288 628Q288 635 231 637ZM649 544Q649 574 634 600T585 634Q578 636 493 637Q473 637 451 637T416 636H403Q388 635 384 626Q382 622 352 506Q352 503 351 500L320 374H401Q482 374 494 376Q554 386 601 434T649 544ZM595 229Q595 273 572 302T512 336Q506 337 429 337Q311 337 310 336Q310 334 293 263T258 122L240 52Q240 48 252 48T333 46Q422 46 429 47Q491 54 543 105T595 229Z"></path></g><g data-mml-node="mi" transform="translate(792,-150) scale(0.707)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></g></svg></mjx-container> 是面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.462ex;" xmlns="http://www.w3.org/2000/svg" width="0.932ex" height="1.957ex" role="img" focusable="false" viewBox="0 -661 412 865"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></svg></mjx-container> 的辐射度</li>
+<li><mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.666ex;" xmlns="http://www.w3.org/2000/svg" width="2.854ex" height="2.204ex" role="img" focusable="false" viewBox="0 -680 1261.3 974.2"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D439" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path></g><g data-mml-node="TeXAtom" transform="translate(676,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(345,0)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></g></g></svg></mjx-container> 是形状因子（form factor），也可理解为光传输因子，它刻画了光能从面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.462ex;" xmlns="http://www.w3.org/2000/svg" width="0.932ex" height="1.957ex" role="img" focusable="false" viewBox="0 -661 412 865"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></svg></mjx-container> 传输到面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 的比例，值介于 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.05ex;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="1.557ex" role="img" focusable="false" viewBox="0 -666 500 688"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g></g></svg></mjx-container> 到 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.131ex" height="1.507ex" role="img" focusable="false" viewBox="0 -666 500 666"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mn"><path data-c="31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path></g></g></g></svg></mjx-container> 之间</li>
+</ul>
+<p>Each term apart from <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.666ex;" xmlns="http://www.w3.org/2000/svg" width="2.854ex" height="2.204ex" role="img" focusable="false" viewBox="0 -680 1261.3 974.2"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D439" d="M48 1Q31 1 31 11Q31 13 34 25Q38 41 42 43T65 46Q92 46 125 49Q139 52 144 61Q146 66 215 342T285 622Q285 629 281 629Q273 632 228 634H197Q191 640 191 642T193 659Q197 676 203 680H742Q749 676 749 669Q749 664 736 557T722 447Q720 440 702 440H690Q683 445 683 453Q683 454 686 477T689 530Q689 560 682 579T663 610T626 626T575 633T503 634H480Q398 633 393 631Q388 629 386 623Q385 622 352 492L320 363H375Q378 363 398 363T426 364T448 367T472 374T489 386Q502 398 511 419T524 457T529 475Q532 480 548 480H560Q567 475 567 470Q567 467 536 339T502 207Q500 200 482 200H470Q463 206 463 212Q463 215 468 234T473 274Q473 303 453 310T364 317H309L277 190Q245 66 245 60Q245 46 334 46H359Q365 40 365 39T363 19Q359 6 353 0H336Q295 2 185 2Q120 2 86 2T48 1Z"></path></g><g data-mml-node="TeXAtom" transform="translate(676,-150) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g><g data-mml-node="mi" transform="translate(345,0)"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></g></g></svg></mjx-container> can be represented as a 3-dimensional vector, representing an RGB colour where each term is between <code>0</code> and <code>1</code>. <code>Fij</code> is just used as a multiplier to reduce the contribution of the radiosity from patch <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.462ex;" xmlns="http://www.w3.org/2000/svg" width="0.932ex" height="1.957ex" role="img" focusable="false" viewBox="0 -661 412 865"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D457" d="M297 596Q297 627 318 644T361 661Q378 661 389 651T403 623Q403 595 384 576T340 557Q322 557 310 567T297 596ZM288 376Q288 405 262 405Q240 405 220 393T185 362T161 325T144 293L137 279Q135 278 121 278H107Q101 284 101 286T105 299Q126 348 164 391T252 441Q253 441 260 441T272 442Q296 441 316 432Q341 418 354 401T367 348V332L318 133Q267 -67 264 -75Q246 -125 194 -164T75 -204Q25 -204 7 -183T-12 -137Q-12 -110 7 -91T53 -71Q70 -71 82 -81T95 -112Q95 -148 63 -167Q69 -168 77 -168Q111 -168 139 -140T182 -74L193 -32Q204 11 219 72T251 197T278 308T289 365Q289 372 288 376Z"></path></g></g></g></svg></mjx-container>. <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.489ex;" xmlns="http://www.w3.org/2000/svg" width="1.909ex" height="1.489ex" role="img" focusable="false" viewBox="0 -442 844 658"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><path data-c="1D70C" d="M58 -216Q25 -216 23 -186Q23 -176 73 26T127 234Q143 289 182 341Q252 427 341 441Q343 441 349 441T359 442Q432 442 471 394T510 276Q510 219 486 165T425 74T345 13T266 -10H255H248Q197 -10 165 35L160 41L133 -71Q108 -168 104 -181T92 -202Q76 -216 58 -216ZM424 322Q424 359 407 382T357 405Q322 405 287 376T231 300Q217 269 193 170L176 102Q193 26 260 26Q298 26 334 62Q367 92 389 158T418 266T424 322Z"></path></g><g data-mml-node="mi" transform="translate(550,-150) scale(0.707)"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></g></svg></mjx-container> can similarly be considered a vector of multipliers for each of the R, G and B elements of the result of the sum.</p>
+<p>Combining the equations of all of the patches into a single matrix, the radiosity of each patch can be computed iteratively (see documentation). This, however, occupies a lot of space in memory (which can slow things down if hard disk paging has to occur) and makes it difficult to preview things: if you want to see the results, you have to run the algorithm all the way through to completion.</p>
+<p>The "Progressive Refinement" method allows a partial run of the algorithm to be displayed and then for subsequent runs to "refine" the result. This works by "shooting" the light from the patch with the most radiosity in each run, which over a small number of runs will give a rough approximation of the lighting as a whole. Many more iterations are required in order to correctly compute the subtler details of the illumination.</p>
+<p>Memory-wise, the matrix method uses an amount of memory that is an order of magnitude larger than (ie. the square of) the memory used by progressive refinement. This means that by using the latter method, much more complex scenes can be computed with the same amount of RAM.</p>
+<h1 id="核心算法"><a href="#核心算法" class="headerlink" title="核心算法"></a>核心算法</h1><p>To light a level, VRAD logic begins in <code>RunVRAD()</code>, though the heavy lifting mostly happens one level lower in <code>RadWorld_Go()</code>. The summary of the non-MPI process, assuming all lighting features are requested, is as follows:</p>
+<pre><code class="highlight plaintext">Load the BSP and other resources, eg. lights.rad
+Initialise various data structures.
+
+Make a single patch for each face.
+Recursively subdivide each patch int children, until the children are smaller
+    than the chop size in all axes.
+
+Initialise the macro texture.
+
+If performing incremental light simulation:
+    Prepare for incremental lighting.
+    Determine which faces are visible to which lights.
+Otherwise:
+    Mark all faces potentially visible to lights.
+
+Sample lighting for all faces.
+Compute lightmap data offsets for each face (see BSP lightmap data format).
+
+If performing incremental light simulation:
+    Finalise lighting.
+    Exit.
+
+Export direct lights to world lights.
+
+If computing light bounces:
+    Compute transfers for visleaves. (TODO: What on earth is this?)
+    Bounce light between patches, adding to their accumulated light.
+
+Accumulate light for displacements.
+Combine indirect lighting with direct lighting.
+Compute detail prop lighting.
+Compute ambient lighting for leaves.
+
+If computing static prop lighting:
+    Compute static prop lighting.
+
+Write results out to BSP.</code></pre>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>Some of the terms and concepts used within the VRAD simulation are as follows:</p>
+<h2 id="切割-quot-Chop-quot"><a href="#切割-quot-Chop-quot" class="headerlink" title="切割 - &quot;Chop&quot;"></a>切割 - "Chop"</h2><p>The following definitions are made within the code:</p>
+<ul>
+<li><code>maxchop</code>: Coarsest allowed number of luxel widths for a patch.</li>
+<li><code>minchop</code>: Tightest number of luxel widths for a patch, used on edges.</li>
+</ul>
+<h2 id="宏纹理-quot-Macro-Texture-quot"><a href="#宏纹理-quot-Macro-Texture-quot" class="headerlink" title="宏纹理 - &quot;Macro Texture&quot;"></a>宏纹理 - "Macro Texture"</h2><p><code>macro_texture.h</code> provides some information:</p>
+<blockquote>
+<p>The macro texture looks for a TGA file with the same name as the BSP file and in the same directory. If it finds one, it maps this texture onto the world dimensions (in the worldspawn entity) and masks all lightmaps with it.</p>
+</blockquote>
+<p>From <code>SampleMacroTexture()</code>, the world position is used to sample the macro texture. On the X and Y axes, a position of <code>world_mins</code> corresponds to texture pixel <code>0</code>, and a position of <code>world_maxs</code> corresponds to texture pixel <code>dimension-1</code>. It is assumed that the texture dimensions begin from the upper left.</p>
+<p>Once the texture sample location is computed, the alpha value from the texture is used in <code>ApplyMacroTextures()</code> to mask the colour of a given luxel. A value of <code>255</code> in the texture corresponds to no masking, whereas a value of <code>0</code> corresponds to complete masking (ie. an output of <code>[0 0 0]</code>).</p>
+<h2 id="面片-quot-Patch-quot"><a href="#面片-quot-Patch-quot" class="headerlink" title="面片 - &quot;Patch&quot;"></a>面片 - "Patch"</h2><p><a target="_blank" rel="noopener" href="https://forums.blackmesasource.com/index.php/Thread/28869-Texture-Lights-and-Bounce-lighting-in-VRAD/">This Black Mesa forum post</a> gives an overview of how VRAD works, within the context of giving the program new lighting parameters:</p>
+<blockquote>
+<p>VRAD "chops" the BSP surfaces into "patches" that get the calculated lighting. The patches act as the pixels of the light map, so to speak. VRAD chops up surfaces according to the lightmap size set in Hammer, takes the light brightness values from each patch, and raytraces that data to every other patch in a huge matrix, using fancy physics based falloff calculations. When texture lights are used, these patches are set to be bright, and give off light.</p>
+<p>By default, VRAD is set to ignore the chopping of surfaces that have flagged unlit materials. It is set this way to save compile time, because surfaces that don't receive lighting (such as nodraw and water, etc.) don't need to have detailed lightmaps.</p>
+</blockquote>
+<p>As per the <code>CPatch</code> definition, each patch has a single parent and a maximum of two children. This implies that patches are structured in a binary tree. It is normal within code to see patches be excluded from lighting simulations if they are not leaves (ie. if they have any children).</p>
+<p>Patches are different</p>
+<p>Some insightful uses of patches within the code (with function signatures modified for readability) are:</p>
+<ul>
+<li><p><code>MakePatchForFace(faceNumber, winding)</code> <em>(vrad.cpp:534)</em></p>
+<p>  Called by <code>MakePatches()</code>. The face begins by having a single patch created, and the chop scale is computed according to the texture scale and is stored in the patch's <code>luxscale</code>. The patch's <code>chop</code> value, however, is just set to <code>maxchop</code>.</p>
+</li>
+<li><p><code>CreateChildPatch(parentIndex, winding, area, centre)</code> <em>(vrad.cpp:767)</em></p>
+<p>  <strong>TODO: Complete this description.</strong></p>
+</li>
+<li><p><code>CreateDirectLights()</code> <em>(lightmap.cpp:1541)</em></p>
+<p>  If the amount of light emitted by a patch is greater than a given threshold, a <em>direct light</em> is created for the patch. This is used for textures that should emit light, where each patch on the surface of the textured face corresponds to a source of light.</p>
+</li>
+<li><p><code>AddSampleToPatch(sample, light, faceNumber)</code> <em>(lightmap.cpp:2060)</em></p>
+<p>  All patches that belong to the specified face are iterated over. For each leaf patch, its <code>samplelight</code> value is increased if the given sample is determined to fall within the bounds of the patch. The colour and intensity of the accumulated light is provided by the <code>light</code> function argument, and this is multiplied by the amount of surface area the sample covers.</p>
+</li>
+<li><p><code>BuildPatchLights(faceNumber)</code> <em>(lightmap.cpp:3196)</em></p>
+<p>  This function calls <code>AddSampleToPatch()</code> as above for each sample on the face, using the sample number to index into the <code>facelight_t</code> structure for the given face. It then adjusts the accumulated light values so that parent patches reflect the sum of the values of their children. After this, it averages patch lighting according to area, and transfers <code>totallight</code> into <code>directlight</code>.</p>
+</li>
+</ul>
+<h2 id="样本-quot-Sample-quot"><a href="#样本-quot-Sample-quot" class="headerlink" title="样本 - &quot;Sample&quot;"></a>样本 - "Sample"</h2><p>A face is cut into samples, which have a position, normal and area. There are as many samples on a face as there are luxels. Samples don't seem to actually store light information - this is what a patch is for.</p>
+<p>In code, samples are relevant in the following areas:</p>
+<ul>
+<li><p><code>BuildFacesamples(lightInfo, faceLight)</code> <em>(lightmap.cpp:650)</em></p>
+<p>  Splits a face up into samples, along the lightmap splitting axes (which are in luxel space). There are <code>luxelsOnS * luxelsOnT</code> samples created. The world position of each sample is stored within it.</p>
+</li>
+<li><p><code>AddSampleToPatch(sample, light, faceNumber)</code> <em>(lightmap.cpp:2060)</em></p>
+<p>  Same purpose as described within the definition for a patch.</p>
+</li>
+<li><p><code>SupersampleLightAtPoint(lightInfo, sampleInfo, sampleIndex, lightStyleIndex,</code><br>  <code>lightingValue, flags)</code> <em>(lightmap.cpp:2683)</em></p>
+<p>  Given a sample index, computes new sample points and normals, and recalculates the lighting for the lightingValue passed in.</p>
+</li>
+</ul>
+<h2 id="光照值-quot-Lighting-value-quot"><a href="#光照值-quot-Lighting-value-quot" class="headerlink" title="光照值 - &quot;Lighting value&quot;"></a>光照值 - "Lighting value"</h2><h1 id="VRAD-数据结构"><a href="#VRAD-数据结构" class="headerlink" title="VRAD 数据结构"></a>VRAD 数据结构</h1><p>VRAD is pretty much written in C-style C++, so it's not as easy as it could be to trace through the logic. Below are some of the core data structures that are involved in the process.</p>
+<h2 id="dworldlight-t-bspfile-h-966"><a href="#dworldlight-t-bspfile-h-966" class="headerlink" title="dworldlight_t (bspfile.h:966)"></a>dworldlight_t <em>(bspfile.h:966)</em></h2><p>Seems to represent a light in the BSP, as opposed to a light in VRAD. The difference is that VRAD lights contain references to simulation-specific information, which would be irrelevant to the game engine. <em>(TODO: Confirm this inference is valid.)</em></p>
+<pre><code class="highlight c++"><span class="keyword">struct</span> <span class="title class_">dworldlight_t</span>
+{
+    <span class="built_in">DECLARE_BYTESWAP_DATADESC</span>();    <span class="comment">// Not sure what this is for, or whether it's relevant</span>
+                                    <span class="comment">// for VRAD.</span>
+    Vector      origin;             <span class="comment">// Position of the light in the world.</span>
+    Vector      intensity;          <span class="comment">// Unclear whether this contains the brightness of the</span>
+                                    <span class="comment">// light as well, or just the colour.</span>
+    Vector      normal;             <span class="comment">// Valve: "For surfaces and spotlights."</span>
+    <span class="type">int</span>         cluster;            <span class="comment">// Which vis cluster this light belongs to?</span>
+    <span class="type">emittype_t</span>  type;               <span class="comment">// What type of light this is: point, spot, etc. See the</span>
+                                    <span class="comment">// emittype_t enum.</span>
+    <span class="type">int</span>         style;              <span class="comment">// What style this light uses?</span>
+    <span class="type">float</span>       stopdot;            <span class="comment">// Valve: "Start of penumbra for emit_spotlight." Probably</span>
+                                    <span class="comment">// named after the dot product.</span>
+    <span class="type">float</span>       stopdot2;           <span class="comment">// Valve: "End of penumbra for emit_spotlight."</span>
+    <span class="type">float</span>       exponent;           <span class="comment">// Something to do with light brightness?</span>
+    <span class="type">float</span>       radius;             <span class="comment">// Valve: "Cutoff distance." Assuming after this distance</span>
+                                    <span class="comment">// in any direction, the light doesn't affect surfaces.</span>
+
+    <span class="comment">// Valve: "Falloff for emit_spotlight + emit_point: </span>
+    <span class="comment">// 1 / (constant_attn + linear_attn * dist + quadratic_attn * dist^2)"</span>
+
+    <span class="type">float</span>       constant_attn;  <span class="comment">// Constant coefficient in the above formula.</span>
+    <span class="type">float</span>       linear_attn;    <span class="comment">// Linear coefficient in the above formula. This is the</span>
+                                <span class="comment">// brightness that is affected by distance.</span>
+    <span class="type">float</span>       quadratic_attn; <span class="comment">// Quadratic coefficient in the above formula. This is the</span>
+                                <span class="comment">// brightness that is affected by the square of the distance.</span>
+    <span class="type">int</span>         flags;          <span class="comment">// Uses a combination of the DWL_FLAGS_ defines.</span>
+    <span class="type">int</span>         texinfo;        <span class="comment">// Not sure.</span>
+    <span class="type">int</span>         owner;          <span class="comment">// Valve: "Entity that this light it relative to."</span>
+};</code></pre>
+<h2 id="directlight-t-vrad-h-66"><a href="#directlight-t-vrad-h-66" class="headerlink" title="directlight_t (vrad.h:66)"></a>directlight_t <em>(vrad.h:66)</em></h2><p>Represents a basic light. In terms of entities, this can be a <code>light</code>, <code>light_spot</code> or <code>light_environment</code>.</p>
+<p><strong>Trivia:</strong> Light classnames are parsed by VRAD depending on whether they begin with the prefix "light". <code>light_dynamic</code> is then manually excluded in code.</p>
+<pre><code class="highlight c++"><span class="keyword">struct</span> <span class="title class_">directlight_t</span>
+{
+    <span class="type">int</span> index;              <span class="comment">// Identifier for this light. (?)</span>
+
+    <span class="type">directlight_t</span>* next;    <span class="comment">// Next direct light in the linked list of lights created by VRAD</span>
+                            <span class="comment">// so far.</span>
+    <span class="type">dworldlight_t</span> light;    <span class="comment">// Corresponding "world" light (ie. light settings from the BSP).</span>
+
+    byte* pvs;              <span class="comment">// Valve: "Accumulated domain of the light." All the VIS</span>
+                            <span class="comment">// information this light can see.</span>
+    <span class="type">int</span> facenum;            <span class="comment">// Valve: "Domain of attached lights." ?</span>
+    <span class="type">int</span> texdata;            <span class="comment">// Valve: "Texture source of traced lights." ?</span>
+
+    Vector snormal;         <span class="comment">// Unit vector in the S axis. (?)</span>
+    Vector tnormal;         <span class="comment">// Unit vector in the T axis. (?)</span>
+    <span class="type">float</span> sscale;           <span class="comment">// Scale of S axis.</span>
+    <span class="type">float</span> tscale;           <span class="comment">// Scale of T axis.</span>
+    <span class="type">float</span> soffset;          <span class="comment">// Offset of light origin along S axis. <span class="doctag">TODO:</span> Before or after scale?</span>
+    <span class="type">float</span> toffset;          <span class="comment">// Offset of light origin along T axis. <span class="doctag">TODO:</span> Before or after scale?</span>
+
+    <span class="type">int</span> dorecalc;                           <span class="comment">// Valve: "Position, vector, spot angle, etc." ?</span>
+    IncrementalLightID  m_IncrementalID;    <span class="comment">// ?</span>
+
+    <span class="comment">// Valve: "Hard-falloff lights (lights that fade to an actual zero). Between</span>
+    <span class="comment">// m_flStartFadeDistance and m_flEndFadeDistance, a smoothstep to zero will be done,</span>
+    <span class="comment">// so that the light goes to zero at the end."</span>
+    <span class="type">float</span> m_flStartFadeDistance;    <span class="comment">// In units?</span>
+    <span class="type">float</span> m_flEndFadeDistance;      <span class="comment">// In units?</span>
+    <span class="type">float</span> m_flCapDist;              <span class="comment">// Valve: "Max distance to feed in." Assuming this is a</span>
+                                    <span class="comment">// manual override that can truncate brightness before</span>
+                                    <span class="comment">// m_flEndFadeDistance is reached.</span>
+
+    <span class="comment">// Default constructor.</span>
+    <span class="built_in">directlight_t</span>(<span class="type">void</span>)
+    {
+        m_flEndFadeDistance = <span class="number">-1.0</span>; <span class="comment">// Valve: "End &lt; start indicates not set."</span>
+        m_flStartFadeDistance= <span class="number">0.0</span>;
+        m_flCapDist = <span class="number">1.0e22</span>;
+    }
+};</code></pre>
+<h2 id="CPatch-vrad-h-186"><a href="#CPatch-vrad-h-186" class="headerlink" title="CPatch (vrad.h:186)"></a>CPatch <em>(vrad.h:186)</em></h2><p>As described on the Black Mesa forum page, a patch represents "a pixel of the light map". It looks like a given face is divided up into many patches, and each patch corresponds to some kind of "cell" that accumulates light.</p>
+<pre><code class="highlight c++"><span class="keyword">struct</span> <span class="title class_">CPatch</span>
+{
+    <span class="type">winding_t</span>* winding;     <span class="comment">// Harks back to the Quake days. This is a (theoretically)</span>
+                            <span class="comment">// infinite plane that may have been clipped down to an</span>
+                            <span class="comment">// arbitrary size and shape. Is always convex.</span>
+    Vector mins;            <span class="comment">// The minimum point in 3D space for this patch.</span>
+    Vector maxs;            <span class="comment">// The maximum point in 3D space for this patch. The axis-aligned</span>
+                            <span class="comment">// box (mins, maxs) defines the AABB for the patch.</span>
+    Vector face_mins;       <span class="comment">// Minimum point in 3D space of the original face?</span>
+    Vector face_maxs;       <span class="comment">// Maximum point in 3D space of the original face?</span>
+
+    Vector origin;          <span class="comment">// Valve: "Adjusted off face by face normal." Is this local or</span>
+                            <span class="comment">// global space?</span>
+
+    <span class="type">dplane_t</span>* plane;        <span class="comment">// Valve: "Plane (corrected for facing)." Plane that the winding</span>
+                            <span class="comment">// lies in; not sure what "corrected for facing" means.</span>
+    
+    <span class="type">unsigned</span> <span class="type">short</span>      m_IterationKey; <span class="comment">// Valve: "Used to prevent touching the same patch</span>
+                                        <span class="comment">// multiple times in the same query.</span>
+                                        <span class="comment">// See IncrementPatchIterationKey()."</span>
+    
+    <span class="comment">// Valve: "These are packed into one dword."</span>
+    <span class="type">unsigned</span> <span class="type">int</span> normalMajorAxis : <span class="number">2</span>;   <span class="comment">// Valve" "The major axis of base face normal."</span>
+                                        <span class="comment">// This is probably 0, 1 or 2 - confirm.</span>
+    <span class="type">unsigned</span> <span class="type">int</span> sky : <span class="number">1</span>;               <span class="comment">// Whether this patch is sky or not.</span>
+    <span class="type">unsigned</span> <span class="type">int</span> needsBumpmap : <span class="number">1</span>;      <span class="comment">// Whether this patch needs bump-mapped lighting?</span>
+    <span class="type">unsigned</span> <span class="type">int</span> pad : <span class="number">28</span>;              <span class="comment">// Padding (?)</span>
+
+    Vector normal;              <span class="comment">// Valve: "Adjusted for phong shading." Assuming this means</span>
+                                <span class="comment">// it's interpolated between other normals.</span>
+
+    <span class="type">float</span> planeDist;            <span class="comment">// Valve: "Fixes up patch planes for brush models with an</span>
+                                <span class="comment">// origin brush." ?</span>
+
+    <span class="type">float</span> chop;                 <span class="comment">// Valve: "Smallest acceptable width of patch face."</span>
+    <span class="type">float</span> luxscale;             <span class="comment">// Valve: "Average luxels per world coord."</span>
+    <span class="type">float</span> scale[<span class="number">2</span>];             <span class="comment">// Valve: "Scaling of texture in S &amp; T."</span>
+
+    <span class="type">bumplights_t</span> totallight;    <span class="comment">// Valve: "Accumulated by radiosity. Does NOT include light</span>
+                                <span class="comment">// accounted for by direct lighting."</span>
+    Vector baselight;           <span class="comment">// Valve: "Emissivity only." Assuming colour of emitted light.</span>
+    <span class="type">float</span> basearea;             <span class="comment">// Valve: "Surface per area per baselight instance." ?</span>
+
+    Vector directlight;         <span class="comment">// Valve: "Direct light value." ?</span>
+    <span class="type">float</span> area;                 <span class="comment">// Total area of patch?</span>
+
+    Vector reflectivity;        <span class="comment">// Valve: "Average RGB of texture, modified by material type."</span>
+
+    Vector samplelight;         <span class="comment">// ?</span>
+    <span class="type">float</span> samplearea;           <span class="comment">// Valve: "For averaging direct light." Area covered by</span>
+                                <span class="comment">// samples?</span>
+    <span class="type">int</span> faceNumber;             <span class="comment">// ID of the face this patch relates to?</span>
+    <span class="type">int</span> clusterNumber;          <span class="comment">// ID of the VIS cluster this patch relates to?</span>
+
+    <span class="type">int</span> parent;                 <span class="comment">// Valve: "Patch index of parent."</span>
+    <span class="type">int</span> child1;                 <span class="comment">// Valve: "Patch index for children." Assuming a binary</span>
+    <span class="type">int</span> child2;                 <span class="comment">// tree of patches.</span>
+
+    <span class="type">int</span> ndxNext;                <span class="comment">// Valve: "Next patch index in face." Faces have multiple</span>
+                                <span class="comment">// patches?</span>
+    <span class="type">int</span> ndxNextParent;          <span class="comment">// Valve: "Next parent patch index in face." ?</span>
+    <span class="type">int</span> ndxNextClusterChild;    <span class="comment">// Valve: "Next terminal child index in cluster." ?</span>
+
+    <span class="type">int</span> numtransfers;           <span class="comment">// ?</span>
+    <span class="type">transfer_t</span>* transfers;      <span class="comment">// ? Even looking up transfer_t isn't very helpful.</span>
+
+    <span class="type">short</span> indices[<span class="number">3</span>];           <span class="comment">// Valve: "Displacement use these for subdivision." Power of 2</span>
+                                <span class="comment">// to subdivide the patch in eaxh axis?</span>
+};</code></pre>
+<h1 id="BSP-格式"><a href="#BSP-格式" class="headerlink" title="BSP 格式"></a>BSP 格式</h1><p>The following is the <a target="_blank" rel="noopener" href="https://developer.valvesoftware.com/wiki/Source_BSP_File_Format#Lighting">VDC information on the BSP lighting lump</a>:</p>
+<blockquote>
+<p>The lighting lump (Lump 8) is used to store the static lightmap samples of map faces. Each lightmap sample is a colour tint that multiplies the colours of the underlying texture pixels, to produce lighting of varying intensity. These lightmaps are created during the VRAD phase of map compilation and are referenced from the <code>dface_t</code> structure. The current lighting lump version is 1.<br>Each <code>dface_t</code> may have a up to four lightstyles defined in its <code>styles[]</code> array (which contains <code>255</code> to represent no lightstyle). The number of luxels in each direction of the face is given by the two <code>LightmapTextureSizeInLuxels[]</code> members (plus 1), and the total number of luxels per face is thus:</p>
+</blockquote>
+<pre><code class="highlight plaintext">(LightmapTextureSizeInLuxels[0] + 1) * (LightmapTextureSizeInLuxels[1] + 1)</code></pre>
+<blockquote>
+<p>Each face gives a byte offset into the lighting lump in its <code>lightofs</code> member (if no lighting information is used for this face e.g. faces with skybox, nodraw and invisible textures, <code>lightofs</code> is <code>-1</code>.) There are <code>(number of lightstyles)*(number of luxels)</code> lightmap samples for each face, where each sample is a 4-byte <code>ColorRGBExp32</code> structure:</p>
+</blockquote>
+<pre><code class="highlight plaintext">struct ColorRGBExp32
+{
+    byte r, g, b;
+    signed char exponent;
+};</code></pre>
+<blockquote>
+<p>Standard RGB format can be obtained from this by multiplying each colour component by <code>2^(exponent)</code>. For faces with bumpmapped textures, there are four times the usual number of lightmap samples, presumably containing samples used to compute the bumpmapping.<br>Immediately preceeding the lightofs-referenced sample group, there are single samples containing the average lighting on the face, one for each lightstyle, in reverse order from that given in the <code>styles[]</code> array.<br>Version 20 BSP files contain a second, identically sized lighting lump (Lump 53). This is presumed to store more accurate (higher-precision) HDR data for each lightmap sample. The format is currently unknown, but is also 32 bits per sample.<br>The maximum size of the lighting lump is <code>0x1000000</code> bytes, i.e. 16 Mb (<code>MAX_MAP_LIGHTING</code>).</p>
+</blockquote>
+<p>The data format can therefore be thought of as being laid out in the following way:</p>
+<pre><code class="highlight plaintext">Sample             : 4 bytes
+Lightstyles        : 4
+Luxels             : 17x17 = 289
+Samples            : 289 x 4 = 1156
+Samples occupy     : 4624 bytes
+Avg samples        : 4
+Avg samples occupy : 16 bytes
+Lightofs           : n
+
+n-16        n-12        n-8         n-4         n           n+4         n+8
+|Avg Sample3|Avg Sample2|Avg Sample1|Avg Sample0|  Sample0  |  Sample1  |  ...
+                                                ^ Lightofs indexes to here</code></pre>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
+              <a href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag"># 学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/12/10/%E5%AD%A6%E6%A0%A1%E7%9A%84-C-%E8%AF%AD%E8%A8%80%E8%AF%BE%E7%A8%8B/" rel="prev" title="学校的 C 语言课程">
+                  <i class="fa fa-angle-left"></i> 学校的 C 语言课程
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">布朗尼蛋糕</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"BlueMicro233","repo":"bluemicro233.github.io","client_id":"Ov23licY9t9BIXN9ZVWh","client_secret":"9db26c71243713feada3379ef8cccc05ac282224","admin_user":"BlueMicro233","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","perPage":10,"pagerDirection":"last","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"18aa4f8610deeb59d207b2e3b2c9cb35"}</script>
+<script src="/js/third-party/comments/gitalk.js" defer></script>
+</body>
+</html>
