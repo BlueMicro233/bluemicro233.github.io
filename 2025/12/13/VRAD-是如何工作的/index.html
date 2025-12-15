@@ -27,7 +27,7 @@
 <meta property="og:description" content="前言八年前，有人尝试优化 VRAD（Valve Radiosity，起源引擎的全局光照烘焙器）的速度，但是不了了之，留下了一篇研究文章：How VRAD works。本文是对该文章的重写。 Issues 上作者的原话： This was only ever really a research idea - as interesting and exciting as it would be, I">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-12-13T04:37:24.000Z">
-<meta property="article:modified_time" content="2025-12-13T08:11:58.644Z">
+<meta property="article:modified_time" content="2025-12-15T11:25:23.956Z">
 <meta property="article:author" content="布朗尼蛋糕">
 <meta property="article:tag" content="学习">
 <meta property="article:tag" content="技术">
@@ -254,13 +254,13 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -320,9 +320,15 @@ mjx-container[display="true"] + br {
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-12-13 12:37:24 / 修改时间：16:11:58" itemprop="dateCreated datePublished" datetime="2025-12-13T12:37:24+08:00">2025-12-13</time>
+      <time title="创建时间：2025-12-13 12:37:24" itemprop="dateCreated datePublished" datetime="2025-12-13T12:37:24+08:00">2025-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-15 19:25:23" itemprop="dateModified" datetime="2025-12-15T19:25:23+08:00">2025-12-15</time>
     </span>
 
   
@@ -340,7 +346,7 @@ mjx-container[display="true"] + br {
 <p><strong>这始终只是个研究构想——尽管它充满趣味且令人兴奋，但我从未深入到足以将其付诸实践的程度。并行化光照算法似乎自成一个独立领域，而我忙于其他项目，实在是抽不出时间在这方面取得实质性进展。</strong></p>
 <h2 id="加速-VRAD-难吗"><a href="#加速-VRAD-难吗" class="headerlink" title="加速 VRAD 难吗"></a>加速 VRAD 难吗</h2><p><strong>难！</strong> 首先 VRAD 本身就是一个体量不小的工程，其次，完全理解把握 VRAD 算法原理除了计算机科学的知识，还要有一定的微积分、线性代数和辐射传热学的功底。如果要进一步实现 GPU 加速，则还需理解 CUDA 并行库或是一种支持计算着色器的图形 API。</p>
 <p>本文将聚焦于 VRAD 系统本身的实现思路。对于 VRAD 涉及的光传输方程推导、有限元方法和辐射度线性方程组的理论，可参考我在知乎上发的这篇文章： <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/13399880275">起源引擎的光照（上）</a>。</p>
-<p>本文是我自己的 modern-vrad 项目的起点。希望这个项目在我 2029 年毕业前会变得足够令人满意，我设想它的完美形态应能充分利用现代硬件的加速单元，并且能处理社区地图作者制作的绝大多数场景。</p>
+<p>本文是我自己的 modern-vrad 项目的起点。希望这个项目在我 2029 年毕业前会变得足够令人满意，我设想它的完美形态应能充分利用现代硬件的加速单元，并且能处理社区地图作者制作的绝大多数场景，成为一个可以广泛使用的工具。</p>
 <h1 id="VRAD-介绍"><a href="#VRAD-介绍" class="headerlink" title="VRAD 介绍"></a>VRAD 介绍</h1><p>辐射度算法通常通过将场景划分为 <strong>面片（Patch）</strong> 来实现，面片是具有均匀照明的区域，它是明暗过渡的最小单位。在起源引擎和 VRAD 的体系下，单个面片可视为光照贴图中的单个像素，对应 luxel 的概念。</p>
 <p>需注意某些算法会对面片进行细分（即拆分为更小单元），当判断增加密度更好时便会执行此操作：为了使表面上投射出更锐利、更少方块感的阴影，该表面就应被划分为更多面片。</p>
 <p>面片 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.781ex" height="1.52ex" role="img" focusable="false" viewBox="0 -661 345 672"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D456" d="M184 600Q184 624 203 642T247 661Q265 661 277 649T290 619Q290 596 270 577T226 557Q211 557 198 567T184 600ZM21 287Q21 295 30 318T54 369T98 420T158 442Q197 442 223 419T250 357Q250 340 236 301T196 196T154 83Q149 61 149 51Q149 26 166 26Q175 26 185 29T208 43T235 78T260 137Q263 149 265 151T282 153Q302 153 302 143Q302 135 293 112T268 61T223 11T161 -11Q129 -11 102 10T74 74Q74 91 79 106T122 220Q160 321 166 341T173 380Q173 404 156 404H154Q124 404 99 371T61 287Q60 286 59 284T58 281T56 279T53 278T49 278T41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container> 的辐射度可表示为：</p>
@@ -363,59 +369,63 @@ mjx-container[display="true"] + br {
 </div>
 
 <p>但此方法会占用大量内存空间（若在硬盘上有分页内存则会更慢），且难以预览效果。使用迭代法时，若要查看结果，必须运行算法直至完全结束。</p>
-<p><strong>渐进式优化的辐射度方法</strong> <a target="_blank" rel="noopener" href="https://www.cs.unc.edu/~fuchs/publications/Bergman1986.pdf">[Bergman et al., 1986]</a> 允许先呈现算法的局部运行结果，并通过后续迭代“精炼”最终效果。其工作原理是在每次迭代中“发射”来自当前辐射度最高区域的光线，经过少量迭代即可获得整体光照的粗略近似。若要精确计算光照的细微细节，则需要更多迭代次数。</p>
-<p>就内存消耗而言，迭代法所需内存量比渐进优化法高出一个数量级（即后者内存需求的平方）。这意味着采用后者方法可在相同内存容量下计算更复杂的场景。</p>
-<p>事实上渐进优化法的性能表现足以在现代 GPU 上实时运行，也就是在 Hammer 里<strong>直接实时预览最终效果</strong>实际上是可行的。</p>
-<h1 id="核心算法"><a href="#核心算法" class="headerlink" title="核心算法"></a>核心算法</h1><p>To light a level, VRAD logic begins in <code>RunVRAD()</code>, though the heavy lifting mostly happens one level lower in <code>RadWorld_Go()</code>. The summary of the non-MPI process, assuming all lighting features are requested, is as follows:</p>
-<pre><code class="highlight plaintext">Load the BSP and other resources, eg. lights.rad
-Initialise various data structures.
+<p><strong>渐进式辐射度方法</strong> <a target="_blank" rel="noopener" href="https://www.cs.unc.edu/~fuchs/publications/Bergman1986.pdf">[Bergman et al., 1986]</a> 允许先呈现算法的局部运行结果，并通过后续迭代“精炼”最终效果。其工作原理是在每次迭代中“发射”来自当前辐射度最高区域的光线，经过少量迭代即可获得整体光照的粗略近似。若要精确计算光照的细微细节，则需要更多迭代次数。</p>
+<p>就内存消耗而言，迭代法所需内存量比渐进法高出一个数量级（即后者内存需求的平方）。这意味着采用后者方法可在相同内存容量下计算更复杂的场景。<strong>起源引擎使用的正是渐近法。</strong> </p>
+<p>事实上，渐进法的性能表现已足以在现代 GPU 上实时运行，也就是在 Hammer 里<strong>直接实时预览最终效果</strong>实际上是可行的。</p>
+<hr>
+<h1 id="核心算法"><a href="#核心算法" class="headerlink" title="核心算法"></a>核心算法</h1><p>为实现地图光照效果，VRAD 开始于一个函数调用 <code>RunVRAD()</code>，但核心计算工作主要在下层的 RadWorld_Go() 函数中完成。假设启用所有光照特性，非 MPI 流程的执行逻辑总结如下：</p>
+<pre><code class="highlight plaintext">加载 BSP 文件及其他资源（如 lights.rad）;
 
-Make a single patch for each face.
-Recursively subdivide each patch int children, until the children are smaller
-    than the chop size in all axes.
+初始化各类数据结构;
 
-Initialise the macro texture.
+为每个面创建单个面片;
 
-If performing incremental light simulation:
-    Prepare for incremental lighting.
-    Determine which faces are visible to which lights.
-Otherwise:
-    Mark all faces potentially visible to lights.
+将每个面片递归细分为子面片，直到所有子面片在各坐标轴上的尺寸均小于 chop size;
 
-Sample lighting for all faces.
-Compute lightmap data offsets for each face (see BSP lightmap data format).
+初始化 macro texture;
 
-If performing incremental light simulation:
-    Finalise lighting.
-    Exit.
+if 执行渐进光传输模拟:
+    为增量光照做准备;
+    判定哪些面能被哪些光源照射到;
+else：
+    标记所有可能被光源照射到的面;
 
-Export direct lights to world lights.
+对所有面进行光照采样;
 
-If computing light bounces:
-    Compute transfers for visleaves. (TODO: What on earth is this?)
-    Bounce light between patches, adding to their accumulated light.
+计算每个面的 lightmap 数据偏移量;
 
-Accumulate light for displacements.
-Combine indirect lighting with direct lighting.
-Compute detail prop lighting.
-Compute ambient lighting for leaves.
+if 仍在光照模拟：
+    完成光照计算;
+    退出;
 
-If computing static prop lighting:
-    Compute static prop lighting.
+将直接光照数据导出至 world lights;
 
-Write results out to BSP.</code></pre>
-<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>Some of the terms and concepts used within the VRAD simulation are as follows:</p>
-<h2 id="切割-quot-Chop-quot"><a href="#切割-quot-Chop-quot" class="headerlink" title="切割 - &quot;Chop&quot;"></a>切割 - "Chop"</h2><p>The following definitions are made within the code:</p>
-<ul>
-<li><code>maxchop</code>: Coarsest allowed number of luxel widths for a patch.</li>
-<li><code>minchop</code>: Tightest number of luxel widths for a patch, used on edges.</li>
-</ul>
-<h2 id="宏纹理-quot-Macro-Texture-quot"><a href="#宏纹理-quot-Macro-Texture-quot" class="headerlink" title="宏纹理 - &quot;Macro Texture&quot;"></a>宏纹理 - "Macro Texture"</h2><p><code>macro_texture.h</code> provides some information:</p>
+if 计算 bounce lighting：
+    为 visleaves 计算光照传递数据;
+    在面片间进行光线反弹计算，将反弹光累加到面片的光照值中;
+
+为 displacements 表面累加光照;
+
+合并间接光照与直接光照;
+
+计算 detail prop 光照;
+
+计算叶子节点的环境光照;
+
+若计算 static prop 光照：
+    计算 static prop 光照;
+
+将计算结果写入 BSP;</code></pre>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><p>VRAD 具有以下特定术语：</p>
+<h2 id="切割-quot-Chop-quot"><a href="#切割-quot-Chop-quot" class="headerlink" title="切割 - &quot;Chop&quot;"></a>切割 - "Chop"</h2><p>代码中定义了以下参数：</p>
+<p>maxchop：面片允许的最粗粒度光照贴图纹素（luxel）的数量。</p>
+<p>minchop：面片在边缘区域使用的最细粒度光照贴图纹素的数量。</p>
+<h2 id="宏纹理-quot-Macro-Texture-quot"><a href="#宏纹理-quot-Macro-Texture-quot" class="headerlink" title="宏纹理 - &quot;Macro Texture&quot;"></a>宏纹理 - "Macro Texture"</h2><p>头文件 <code>macro_texture.h</code> 中包含的说明：</p>
 <blockquote>
-<p>The macro texture looks for a TGA file with the same name as the BSP file and in the same directory. If it finds one, it maps this texture onto the world dimensions (in the worldspawn entity) and masks all lightmaps with it.</p>
+<p>宏纹理会在 BSP 文件同目录下查找与 BSP 同名的 TGA 纹理文件。若找到，则将该纹理映射到世界坐标系范围（基于 <code>worldspawn</code> 实体），并以此纹理作为所有光照贴图的遮罩。</p>
 </blockquote>
-<p>From <code>SampleMacroTexture()</code>, the world position is used to sample the macro texture. On the X and Y axes, a position of <code>world_mins</code> corresponds to texture pixel <code>0</code>, and a position of <code>world_maxs</code> corresponds to texture pixel <code>dimension-1</code>. It is assumed that the texture dimensions begin from the upper left.</p>
-<p>Once the texture sample location is computed, the alpha value from the texture is used in <code>ApplyMacroTextures()</code> to mask the colour of a given luxel. A value of <code>255</code> in the texture corresponds to no masking, whereas a value of <code>0</code> corresponds to complete masking (ie. an output of <code>[0 0 0]</code>).</p>
+<p>在 <code>SampleMacroTexture()</code> 函数中，程序通过世界坐标对宏纹理进行采样。在 X、Y 轴上，<code>world_mins</code>（世界最小坐标）对应纹理像素坐标 <code>0</code>，<code>world_maxs</code>（世界最大坐标）对应纹理像素坐标 <code>dimension-1</code>（纹理维度减 1）。纹理像素的坐标原点默认位于左上角。</p>
+<p>计算出纹理采样位置后，<code>ApplyMacroTextures()</code> 函数会使用该位置的纹理 Alpha 值对单个光照单元（luxel）的颜色进行遮罩处理：Alpha 值为 <code>255</code> 时无遮罩效果，Alpha 值为 <code>0</code> 时完全遮罩（即输出颜色为 <code>[0 0 0]</code>）。</p>
 <h2 id="面片-quot-Patch-quot"><a href="#面片-quot-Patch-quot" class="headerlink" title="面片 - &quot;Patch&quot;"></a>面片 - "Patch"</h2><p><a target="_blank" rel="noopener" href="https://forums.blackmesasource.com/index.php/Thread/28869-Texture-Lights-and-Bounce-lighting-in-VRAD/">This Black Mesa forum post</a> gives an overview of how VRAD works, within the context of giving the program new lighting parameters:</p>
 <blockquote>
 <p>VRAD "chops" the BSP surfaces into "patches" that get the calculated lighting. The patches act as the pixels of the light map, so to speak. VRAD chops up surfaces according to the lightmap size set in Hammer, takes the light brightness values from each patch, and raytraces that data to every other patch in a huge matrix, using fancy physics based falloff calculations. When texture lights are used, these patches are set to be bright, and give off light.</p>
@@ -649,6 +659,9 @@ n-16        n-12        n-8         n-4         n           n+4         n+8
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2025/12/15/%E5%93%B2%E5%AD%A6%E5%9F%BA%E7%A1%80/" rel="next" title="哲学时间：几条哲学评论">
+                  哲学时间：几条哲学评论 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
