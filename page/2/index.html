@@ -138,13 +138,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -166,6 +166,117 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="布朗尼蛋糕">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="布朗尼的小屋">
+      <meta itemprop="description" content="闲人">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 布朗尼的小屋">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/" class="post-title-link" itemprop="url">C# 垃圾回收</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-11-30 09:50:23 / 修改时间：11:14:07" itemprop="dateCreated datePublished" datetime="2025-11-30T09:50:23+08:00">2025-11-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得 free() 手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点 C#。它当然有一套 GC 机制。</p>
+<h2 id="GC-的条件"><a href="#GC-的条件" class="headerlink" title="GC 的条件"></a>GC 的条件</h2><ol>
+<li><p>内存不足。</p>
+</li>
+<li><p>手动调用了 <code>GC.Collect</code> 方法：</p>
+</li>
+</ol>
+<pre><code class="highlight csharp"><span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++)
+&#123;
+    <span class="keyword">var</span> temp = <span class="keyword">new</span> <span class="built_in">object</span>();
+&#125;
+<span class="comment">// 强制触发 GC</span>
+GC.Collect();</code></pre>
+<h2 id="GC-的机制"><a href="#GC-的机制" class="headerlink" title="GC 的机制"></a>GC 的机制</h2><p>GC 先默认堆中的所有对象都是可以回收的，然后再标记哪些对象被引用（它们是可达/活动的），然后清除掉不可达的对象。</p>
+<p><code>GC.Collect()</code> 里面可以有参数，比如 0 就对应 Gen 0。这是因为 Generational GC 的关系。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Gen 0</th>
+<th style="text-align:center">Gen 1</th>
+<th style="text-align:center">Gen 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">新创建的(小)</td>
+<td style="text-align:center">Gen 0 回收后存活的</td>
+<td style="text-align:center">长期存活的(大)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>当 Gen 0 堆中的内存达到某个阈值，则触发 Gen 0 GC，剩下的存活对象进入 Gen 1；如果 Gen 1 的也达到阈值，则触发 Gen 1 GC，并且同时 Gen 0 中的也再次回收一遍，存活的对象全部放入 Gen 2 的堆内存空间；Gen 2 GC 则同时回收 0, 1, 2 三代的。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="GC-需要时间"><a href="#GC-需要时间" class="headerlink" title="GC 需要时间"></a>GC 需要时间</h3><p>假设在一个大型开放世界游戏内，玩家突然从一个点跑到距离很远的另一个点，那么旧的点周围的资产必须被卸载掉，否则会爆内存。</p>
+<figure>
+  <img src="/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg" class="" title="大型开放世界">
+  <figcaption>《荒野大镖客：救赎 2》</figcaption>
+</figure>
+
+<p>如果在这期间进行 GC，游戏将面临十分严重的卡顿。解决方法就是黑屏加载，但是这相当影响观感，所以非传统的流式资产传输（Streaming Assets）应运而生，比如在《荒野大镖客：救赎 2》这样的游戏里，使用外挂进行超速飞行，很难感觉到卡顿。</p>
+<h3 id="GC-不能释放所有资源"><a href="#GC-不能释放所有资源" class="headerlink" title="GC 不能释放所有资源"></a>GC 不能释放所有资源</h3><p>GC 并不能释放非托管的资源，因为回收机制的一个前提就是它要回收的内存被分配在托管堆上。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -364,7 +475,7 @@
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2025</span>
+    <span itemprop="copyrightYear">2026</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
