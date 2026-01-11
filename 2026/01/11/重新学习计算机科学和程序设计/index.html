@@ -19,29 +19,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"bluemicro233.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":false,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得 free() 手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点 C#。它当然有一套 GC 机制。 GC 的条件 内存不足。  手动调用了 GC">
+    <meta name="description" content="这学期学了什么课程这学期学校开了两门专业相关的课，一门是《计算机科学与工程导论》、一门是《C 语言程序设计》，这是多少同学人生中第一次接受科班计算机教育（废话），然而它们却污染了无数洁净的大脑。学校学的东西落后无用（或者是晦涩难懂）&#x3D;&gt;自学已经是显而易见的规律。 《C 语言程序设计》似乎在之前的某篇文章里辣评了一下，这里不说了。但不得不承认的是，这门课发挥了它应有的价值：虽然学校自己的教授方">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C# 垃圾回收">
-<meta property="og:url" content="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/index.html">
+<meta property="og:title" content="重新学习计算机科学和程序设计">
+<meta property="og:url" content="https://bluemicro233.github.io/2026/01/11/%E9%87%8D%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E5%92%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/index.html">
 <meta property="og:site_name" content="布朗尼的小屋">
-<meta property="og:description" content="C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得 free() 手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点 C#。它当然有一套 GC 机制。 GC 的条件 内存不足。  手动调用了 GC">
+<meta property="og:description" content="这学期学了什么课程这学期学校开了两门专业相关的课，一门是《计算机科学与工程导论》、一门是《C 语言程序设计》，这是多少同学人生中第一次接受科班计算机教育（废话），然而它们却污染了无数洁净的大脑。学校学的东西落后无用（或者是晦涩难懂）&#x3D;&gt;自学已经是显而易见的规律。 《C 语言程序设计》似乎在之前的某篇文章里辣评了一下，这里不说了。但不得不承认的是，这门课发挥了它应有的价值：虽然学校自己的教授方">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg">
-<meta property="article:published_time" content="2025-11-30T01:50:23.000Z">
-<meta property="article:modified_time" content="2025-11-30T03:14:07.151Z">
+<meta property="article:published_time" content="2026-01-11T10:03:25.000Z">
+<meta property="article:modified_time" content="2026-01-11T11:54:15.260Z">
 <meta property="article:author" content="布朗尼蛋糕">
+<meta property="article:tag" content="学习">
 <meta property="article:tag" content="技术">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg">
 
 
-<link rel="canonical" href="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+<link rel="canonical" href="https://bluemicro233.github.io/2026/01/11/%E9%87%8D%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E5%92%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/","path":"2025/11/30/C-垃圾回收/","title":"C# 垃圾回收"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://bluemicro233.github.io/2026/01/11/%E9%87%8D%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E5%92%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/","path":"2026/01/11/重新学习计算机科学和程序设计/","title":"重新学习计算机科学和程序设计"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>C# 垃圾回收 | 布朗尼的小屋</title>
+<title>重新学习计算机科学和程序设计 | 布朗尼的小屋</title>
   
 
 
@@ -130,7 +129,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">GC 的条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GC-%E7%9A%84%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">GC 的机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-%E9%9C%80%E8%A6%81%E6%97%B6%E9%97%B4"><span class="nav-number">3.1.</span> <span class="nav-text">GC 需要时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GC-%E4%B8%8D%E8%83%BD%E9%87%8A%E6%94%BE%E6%89%80%E6%9C%89%E8%B5%84%E6%BA%90"><span class="nav-number">3.2.</span> <span class="nav-text">GC 不能释放所有资源</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%99%E5%AD%A6%E6%9C%9F%E5%AD%A6%E4%BA%86%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">这学期学了什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%BE%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">课程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LBD-principle"><span class="nav-number">1.2.</span> <span class="nav-text">LBD principle</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.</span> <span class="nav-text">重新学习</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -181,7 +180,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2026/01/11/%E9%87%8D%E6%96%B0%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E5%92%8C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -194,12 +193,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="C# 垃圾回收 | 布朗尼的小屋">
+      <meta itemprop="name" content="重新学习计算机科学和程序设计 | 布朗尼的小屋">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          C# 垃圾回收
+          重新学习计算机科学和程序设计
         </h1>
 
         <div class="post-meta-container">
@@ -211,7 +210,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-11-30 09:50:23 / 修改时间：11:14:07" itemprop="dateCreated datePublished" datetime="2025-11-30T09:50:23+08:00">2025-11-30</time>
+      <time title="创建时间：2026-01-11 18:03:25 / 修改时间：19:54:15" itemprop="dateCreated datePublished" datetime="2026-01-11T18:03:25+08:00">2026-01-11</time>
     </span>
 
   
@@ -223,48 +222,16 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>C 使用 malloc() 进行动态内存空间分配，当那一部分空间不被需要时就得 free() 手动释放。如果没有进行释放，那么就要等程序结束，在此期间就造成了内存泄漏。为了避免这些情况，现代语言有一些自动回收的特性（Garbage Collection）。为了便于以后 s&amp;box 的进一步开发，最近正在学习一点 C#。它当然有一套 GC 机制。</p>
-<h2 id="GC-的条件"><a href="#GC-的条件" class="headerlink" title="GC 的条件"></a>GC 的条件</h2><ol>
-<li><p>内存不足。</p>
-</li>
-<li><p>手动调用了 <code>GC.Collect</code> 方法：</p>
-</li>
-</ol>
-<pre><code class="highlight csharp"><span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++)
-&#123;
-    <span class="keyword">var</span> temp = <span class="keyword">new</span> <span class="built_in">object</span>();
-&#125;
-<span class="comment">// 强制触发 GC</span>
-GC.Collect();</code></pre>
-<h2 id="GC-的机制"><a href="#GC-的机制" class="headerlink" title="GC 的机制"></a>GC 的机制</h2><p>GC 先默认堆中的所有对象都是可以回收的，然后再标记哪些对象被引用（它们是可达/活动的），然后清除掉不可达的对象。</p>
-<p><code>GC.Collect()</code> 里面可以有参数，比如 0 就对应 Gen 0。这是因为 Generational GC 的关系。</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Gen 0</th>
-<th style="text-align:center">Gen 1</th>
-<th style="text-align:center">Gen 2</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">新创建的(小)</td>
-<td style="text-align:center">Gen 0 回收后存活的</td>
-<td style="text-align:center">长期存活的(大)</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>当 Gen 0 堆中的内存达到某个阈值，则触发 Gen 0 GC，剩下的存活对象进入 Gen 1；如果 Gen 1 的也达到阈值，则触发 Gen 1 GC，并且同时 Gen 0 中的也再次回收一遍，存活的对象全部放入 Gen 2 的堆内存空间；Gen 2 GC 则同时回收 0, 1, 2 三代的。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="GC-需要时间"><a href="#GC-需要时间" class="headerlink" title="GC 需要时间"></a>GC 需要时间</h3><p>假设在一个大型开放世界游戏内，玩家突然从一个点跑到距离很远的另一个点，那么旧的点周围的资产必须被卸载掉，否则会爆内存。</p>
-<figure>
-  <img src="/2025/11/30/C-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/openWorld.jpg" class="" title="大型开放世界">
-  <figcaption>《荒野大镖客：救赎 2》</figcaption>
-</figure>
-
-<p>如果在这期间进行 GC，游戏将面临十分严重的卡顿。解决方法就是黑屏加载，但是这相当影响观感，所以非传统的流式资产传输（Streaming Assets）应运而生，比如在《荒野大镖客：救赎 2》这样的游戏里，使用外挂进行超速飞行，很难感觉到卡顿。</p>
-<h3 id="GC-不能释放所有资源"><a href="#GC-不能释放所有资源" class="headerlink" title="GC 不能释放所有资源"></a>GC 不能释放所有资源</h3><p>GC 并不能释放非托管的资源，因为回收机制的一个前提就是它要回收的内存被分配在托管堆上。</p>
+    <div class="post-body" itemprop="articleBody"><h1 id="这学期学了什么"><a href="#这学期学了什么" class="headerlink" title="这学期学了什么"></a>这学期学了什么</h1><h2 id="课程"><a href="#课程" class="headerlink" title="课程"></a>课程</h2><p>这学期学校开了两门专业相关的课，一门是《计算机科学与工程导论》、一门是《C 语言程序设计》，这是多少同学人生中第一次接受科班计算机教育<del>（废话）</del>，然而它们却污染了无数洁净的大脑。<strong>学校学的东西落后无用（或者是晦涩难懂）=&gt;自学</strong>已经是显而易见的规律。</p>
+<p>《C 语言程序设计》似乎在之前的某篇文章里辣评了一下，这里不说了。但不得不承认的是，这门课发挥了它应有的价值：虽然学校自己的教授方法落后，作业考试大部分是是 intellectual masturbation，用的 IDE 是 Dev C++ 这种。为了让自己写得舒服点，我迫使自己掌握了 VS Code / VS + Git 的工作流，并且顺便熟悉了 Linux 操作系统等等。</p>
+<p>所以，如果没有这么一套课程，我没有那么强烈的动力去做这些事情——这些事情其实就是 MIT 那套大名鼎鼎的 <em>The Missing Semester of Your CS Education</em> 课程会讲授的内容，但是我一直都没机会（或者说不敢/不想）上手做一遍。</p>
+<p>《计算机科学与工程导论》这课上得也奇葩，老师就干讲 PPT，从数据结构讲到体系结构，整个学期就 2 次不痛不痒的作业。不过令人欣慰的是，有一次作业引导我们去思考递归算法和迭代算法对系统性能的影响，而不是完全聚焦于一些 intellectual masturbation 的功能实现，说明这门课其实并非一无是处。</p>
+<h2 id="LBD-principle"><a href="#LBD-principle" class="headerlink" title="LBD principle"></a>LBD principle</h2><p>Learn By Doing，这个谁都会讲，但是得自己做了才真的领略到。我不禁开始咒骂高中时期的自己，为什么那时就死活领会不到这个原则。不过也好，至少现在领会到了。</p>
+<p>但是由于这个原则，我在相当长一段时间内又掉进了一个坑——就是看到什么都感觉想做一遍，并且经常 PUA 自己头脑里装的理论知识没有价值，觉得自己什么都不会做不如死了算了，搞得自己身心俱疲，并且学到的内容也很肤浅。<strong>知道自己想要什么再去做</strong>可能才是根本，我正尝试慢慢地接受这个事实。</p>
+<h1 id="重新学习"><a href="#重新学习" class="headerlink" title="重新学习"></a>重新学习</h1><p>早在高中的时候就听说过 <strong>Lambda Calculus</strong> 的大名，但苦于认为自己没有一点系统的程序设计基础，于是对这些基础计算机科学敬而远之，后来才发现它们跟逻辑学、分析哲学其实是差不多的东西。</p>
+<p>最近刷 QQ 空间看到有位朋友在一直推一些 Lambda 演算的科普视频，抱着好奇的心态点进去看，不到几分钟就立刻觉得自己以前学的完全不叫“计算机科学”（虽然这么说肯定是错的），于是想要好好了解一番这些东西。</p>
+<p>所以自己又顺藤摸瓜找到了一些关于函数式编程的教程，不久前刚在 JavaScript 解释器上使用纯函数实现了单向链表的数据结构，第一次体验到<strong>以函数为 building block</strong> 的程序设计的灵韵——同时对计算的本质有了更加深入了理解；以及第一次知道程序还能这么学——就从<strong>单纯和解释器打交道</strong>开始，然后就直接是<strong>函数</strong>、抽象、递归······并且<strong>不受语言特性的打扰</strong>。最近书架上添置一本大名鼎鼎的程序设计教材，就是 SICP。希望以后能腾出足够的空闲时间好好领略。</p>
+<p>不过这一定不是全部，好奇和求知的路没有尽头。</p>
 
     </div>
 
@@ -274,6 +241,7 @@ GC.Collect();</code></pre>
 
     <footer class="post-footer">
           <div class="post-tags">
+              <a href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag"># 学习</a>
               <a href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag"># 技术</a>
           </div>
 
@@ -281,14 +249,11 @@ GC.Collect();</code></pre>
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/11/29/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/" rel="prev" title="在 Apple Silicon 上原生运行《雷神之锤 3》">
-                  <i class="fa fa-angle-left"></i> 在 Apple Silicon 上原生运行《雷神之锤 3》
+                <a href="/2026/01/01/%E4%BB%8E%E9%9B%B6%E6%8E%A8%E5%AF%BC%E5%AE%9A%E6%80%81-Schrodinger-%E6%96%B9%E7%A8%8B/" rel="prev" title="从零推导 Schrödinger 方程">
+                  <i class="fa fa-angle-left"></i> 从零推导 Schrödinger 方程
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/11/30/%E9%AB%98%E6%95%B0/" rel="next" title="高数">
-                  高数 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -338,7 +303,7 @@ GC.Collect();</code></pre>
 </noscript>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"BlueMicro233","repo":"bluemicro233.github.io","client_id":"Ov23licY9t9BIXN9ZVWh","client_secret":"9db26c71243713feada3379ef8cccc05ac282224","admin_user":"BlueMicro233","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","perPage":10,"pagerDirection":"last","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"d3e25c6c5761da9c07d7ebea49bff30c"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"BlueMicro233","repo":"bluemicro233.github.io","client_id":"Ov23licY9t9BIXN9ZVWh","client_secret":"9db26c71243713feada3379ef8cccc05ac282224","admin_user":"BlueMicro233","distraction_free_mode":false,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","perPage":10,"pagerDirection":"last","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"781ad5ca9b22a57965d8cac02e14d8cb"}</script>
 <script src="/js/third-party/comments/gitalk.js" defer></script>
 </body>
 </html>
