@@ -250,7 +250,7 @@ mjx-container[display="true"] + br {
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">文章</span>
         </a>
       </div>
@@ -278,6 +278,178 @@ mjx-container[display="true"] + br {
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2026/05/03/CSAPP-Bomb-Lab-%E5%88%9D%E6%8E%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="布朗尼蛋糕">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="布朗尼的小屋">
+      <meta itemprop="description" content="闲人">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | 布朗尼的小屋">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2026/05/03/CSAPP-Bomb-Lab-%E5%88%9D%E6%8E%A2/" class="post-title-link" itemprop="url">CSAPP Bomb Lab 初探，以及对 ICS 的想法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-05-03 12:43:49" itemprop="dateCreated datePublished" datetime="2026-05-03T12:43:49+08:00">2026-05-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-05-04 00:29:06" itemprop="dateModified" datetime="2026-05-04T00:29:06+08:00">2026-05-04</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><del>说着是 Bomb Lab，其实写了很多别的东西233，相当于总结一部分目前对 CSAPP 的感受</del></p>
+<h1 id="CSAPP"><a href="#CSAPP" class="headerlink" title="CSAPP"></a>CSAPP</h1><p>全称 <strong>Computer Systems: A Programmer&#39;s Perspective</strong>，机械工业出版社的翻译版书名是 <strong>《深入理解计算机系统》</strong> 。</p>
+<p>CSAPP 是一本讲述计算机系统的教材，广泛涵盖了计算机系统各自部分的主要主题，更为珍贵的是，它在保持广度惊人的情况下又有足够的深度，这从它的 Lab 就能看出来。</p>
+<p>CSAPP 涵盖的主题包括：数据表示、程序的机器指令、存储系统、并发编程、文件 I/O、网络等等，第四章还讲述了 CPU 架构，差不多整本书就是想从最顶层的软件到最底层的电路开关都串起来。</p>
+<p>这本书本身是从 CMU 的 15-213 ICS (Introduction to Computer Systems) 课程来的，相应的国内一些学校也会开设类似“系统编程“或是”计算机系统导论“的课，它们要么是直接讲 CSAPP 一部分章节要么就是根据 CSAPP 的核心内容作出更改。</p>
+<h1 id="ICS-的定位"><a href="#ICS-的定位" class="headerlink" title="ICS 的定位"></a>ICS 的定位</h1><p>不要被 15-213 的 <em>Introduction</em> 给骗了，CS 强校的导论课跟国内多数大学的水课导论完全不是一个概念。以 CSAPP 为基础的计算机系统导论课，可以说是我目前见过最难最折磨人的计算机课程。就连 Bomb Lab 自己也幽默地调侃了这一点：</p>
+<blockquote>
+<p>...takes no responsibility for damage, frustration, insanity, bug-eyes, carpal-tunnel syndrome, loss of sleep, or other harm to the VICTIM...<br>...对受害者造成的任何损害、挫败感、精神失常、眼球突出、腕管综合征、失眠或其他伤害，加害者概不负责...</p>
+</blockquote>
+<p>然而兴趣的力量大概足够抵消这些了，或许我的学校不开 ICS 课反而是一件幸事，使人有足够的动力去探索，而不是先让求知欲、耐心和精力被学校给消磨掉。</p>
+<h1 id="Bomb-Lab"><a href="#Bomb-Lab" class="headerlink" title="Bomb Lab"></a>Bomb Lab</h1><p>这可能是 CSAPP 里最出名的 Lab，具体内容是让学生通过 GDB 调试器去逆向分析一个已经编译好了的 Linux 二进制程序，得到 6 组拆除炸弹的正确密码。Bomb Lab 不仅锻炼学习者的工程能力，并且还会进一步建立学习者对程序语言、控制流、内存以及指令集架构的更深刻的洞见，这些都不能仅仅通过阅读教材来得到。</p>
+<p>例如第一关的源码为：</p>
+<pre><code class="highlight c"><span class="comment">/* Hmm...  Six phases must be more secure than one phase! */</span>
+   input = read_line();             <span class="comment">/* Get input                   */</span>
+   phase_1(input);                  <span class="comment">/* Run the phase               */</span>
+   phase_defused();                 <span class="comment">/* Drat!  They figured it out!</span>
+<span class="comment">			      * Let me know how they did it. */</span>
+   <span class="built_in">printf</span>(<span class="string">&quot;Phase 1 defused. How about the next one?\n&quot;</span>);</code></pre>
+<p><code>phase_1</code> 和 <code>phase_defused</code> 的实现当然是不可见的，<strong>整个 Lab 实际上就是要通过反汇编指令去倒推这类函数的实现，从而拆除炸弹</strong>。</p>
+<p>接下来就以第一关 phase_1 为例，再次回味一下 Bomb Lab。它虽然是最简单的一关，但是上手做一遍的收获也不小。</p>
+<h1 id="phase-1"><a href="#phase-1" class="headerlink" title="phase_1"></a>phase_1</h1><p>在更改二进制炸弹的读写权限后，GDB！启动！ </p>
+<pre><code class="highlight plaintext">browniecake@MSI:~/csapp-lab/bomb$ gdb bomb
+
+GNU gdb (Ubuntu 15.1-1ubuntu1~24.04.1) 15.1
+Copyright (C) 2024 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type &quot;show copying&quot; and &quot;show warranty&quot; for details.
+This GDB was configured as &quot;x86_64-linux-gnu&quot;.
+Type &quot;show configuration&quot; for configuration details.
+For bug reporting instructions, please see:
+&lt;https://www.gnu.org/software/gdb/bugs/&gt;.
+Find the GDB manual and other documentation resources online at:
+    &lt;http://www.gnu.org/software/gdb/documentation/&gt;.
+
+For help, type &quot;help&quot;.
+Type &quot;apropos word&quot; to search for commands related to &quot;word&quot;...
+Reading symbols from bomb...
+
+(gdb)
+</code></pre>
+<p>好的，目前我们需要的是做反汇编。在 GDB 中输入 <code>layout asm</code>，映入眼帘的是这个画面，一串 x86-64 Linux ABI 的指令：</p>
+<figure>
+  <img src="/2026/05/03/CSAPP-Bomb-Lab-%E5%88%9D%E6%8E%A2/gdb.png" class="" title="gdb">
+  <figcaption>disassembly</figcaption>
+</figure>
+
+<p>通过移动方向键可以一览整个炸弹的函数接口名称，我们往下翻就能翻到 <code>&lt;phase_1&gt;</code>，于是我们在那里利用 <code>break phase_1</code> 打个断点，接着 <code>run</code> 运行程序：</p>
+<pre><code class="highlight plaintext">Welcome to my fiendish little bomb. You have 6 phases with
+which to blow yourself up. Have a nice day!</code></pre>
+<p>好的，进入了这个令人心惊胆战的二进制炸弹了。接着输入 <code>continue</code> 在我们打的断点那里停下来：</p>
+<figure>
+  <img src="/2026/05/03/CSAPP-Bomb-Lab-%E5%88%9D%E6%8E%A2/phase1.png" class="" title="gdb">
+  <figcaption>phase_1</figcaption>
+</figure>
+
+<p>可以看到确实停在了 <code>phase_1</code> 的入口，我们接下来就可以仔细研究这段反汇编程序了：</p>
+<pre><code class="highlight x86asm"><span class="keyword">sub</span>    <span class="number">$0</span>x8,%rsp
+<span class="keyword">mov</span>    <span class="number">$0</span>x402400,%esi
+callq  <span class="number">0x401338</span> &lt;strings_not_equal&gt;
+<span class="keyword">test</span>   %eax,%eax
+<span class="keyword">je</span>     <span class="number">0x400ef7</span> &lt;phase_1+<span class="number">23</span>&gt;
+callq  <span class="number">0x40143a</span> &lt;explode_bomb&gt;
+<span class="keyword">add</span>    <span class="number">$0</span>x8,%rsp
+<span class="keyword">ret</span></code></pre>
+<h2 id="栈指针"><a href="#栈指针" class="headerlink" title="栈指针"></a>栈指针</h2><p><code>sub    $0x8,%rsp</code> 就是把栈指针（Register Stack Pointer，寄存器 <code>rsp</code>）减 8，给局部变量开辟栈空间，并且保持 16 字节对齐——因为 <code>main</code> 在调用 <code>phase_1</code> 的时候，已经提前把 <code>phase_1</code> 的返回地址（占用 8 字节）压入栈中，使得栈指针本身就偏离了 8 个字节。</p>
+<h2 id="可疑的地址复制操作"><a href="#可疑的地址复制操作" class="headerlink" title="可疑的地址复制操作"></a>可疑的地址复制操作</h2><p><code>mov    $0x402400,%esi</code> 就是把数字 <code>0x402400</code> 放入 <code>esi</code>（Extended Source Index）寄存器中，这个寄存器存放的是将要读取数据的地址。欸！炸弹到这里就要读取什么东西了，这件事有点令人怀疑 <code>0x402400</code> 这个地址...后面就知道了。</p>
+<h2 id="strings-not-equal-调用"><a href="#strings-not-equal-调用" class="headerlink" title="strings_not_equal 调用"></a>strings_not_equal 调用</h2><p><code>callq  0x401338 &lt;strings_not_equal&gt;</code>，其中 <code>0x401338</code> 就是函数 <code>strings_not_equal</code> 的起始地址。对，到这里就是要比较输入字符串和正确字符串了。</p>
+<p>需要注意的是，在 ABI 约定中，<code>eax</code> 寄存器保存着函数的返回值，所以这个 <code>strings_not_equal</code> 的比较结果（0 或 1）是最终存储在 <code>eax</code> 里的。</p>
+<h2 id="test-eax-eax"><a href="#test-eax-eax" class="headerlink" title="test %eax, %eax?????"></a>test %eax, %eax?????</h2><p><code>test   %eax,%eax</code> 实际执行的是对寄存器 <code>eax</code> 自身做 AND 运算，但是却不会改变 <code>eax</code> 本身的值，只会根据结果去改变另一个叫做 <em>标志寄存器</em> 的值。根据 <code>strings_not_equal</code> 函数进行推断，如果字符串相等，即返回值为 <code>0</code>，则标志寄存器的<strong>零标志位</strong>将被写为 <code>1</code>，如果字符串不相等就是 <code>0</code>，所以这段指令就是在设置标志位。</p>
+<h2 id="惊心动魄的跳转"><a href="#惊心动魄的跳转" class="headerlink" title="惊心动魄的跳转"></a>惊心动魄的跳转</h2><p><code>je     0x400ef7 &lt;phase_1+23&gt;</code>，如果是 <code>0</code>，即字符串相等，即密码正确，那么就跳转到 <code>callq  0x40143a &lt;explode_bomb&gt;</code> 的下一条指令。如果字符串不相等，即密码错误，那么就不跳转。</p>
+<blockquote>
+<p><strong>Tip</strong><br>在 x86 架构中，JE 实际上是 JZ（Jump if Zero）的别名，两者功能完全相同。<br>它们依赖标志寄存器中的零标志（Zero Flag, ZF）位：</p>
+<p>ZF = 1 → 表示上一次比较或运算结果为 0（即相等） → 执行跳转<br>ZF = 0 → 表示结果不为 0（不相等） → 不跳转</p>
+</blockquote>
+<h2 id="BOOM"><a href="#BOOM" class="headerlink" title="BOOM!!!"></a>BOOM!!!</h2><p>很遗憾，输入了错误的密码，程序通过 <code>callq  0x40143a &lt;explode_bomb&gt;</code> 指令调用了可怕的自毁程序，可以重开了。</p>
+<h2 id="成功！！！"><a href="#成功！！！" class="headerlink" title="成功！！！"></a>成功！！！</h2><p>太棒了，输入了正确的密码，程序<strong>跳转</strong>到了爆炸指令的下一条指令，即 <code>add     $0x8,%rsp</code>。清理最开始我们就多分配的 8 个字节，否则最后 <code>ret</code> 返回指令读取返回地址会错误地读取到 <code>真正的返回地址 + 8</code>，发生 SIGSEGV（Linux 强行停止了炸弹运行，我们安全了233）。</p>
+<h1 id="分析完成"><a href="#分析完成" class="headerlink" title="分析完成"></a>分析完成</h1><p>我们已经知道了整个程序的运作流程，它写成 C 无非就是：</p>
+<pre><code class="highlight c"><span class="type">void</span> <span class="title function_">phase_1</span><span class="params">(<span class="type">char</span> *input)</span>
+&#123;
+    <span class="type">char</span> *secret_string = (<span class="type">char</span> *)<span class="number">0x402400</span>;
+    <span class="keyword">if</span> (strings_not_equal(input, secret_string))
+    &#123;
+        explode_bomb();
+    &#125;
+&#125;</code></pre>
+<p>那个正确密码就在 <code>0x402400</code> 所指的字符串里。于是我们在 GDB 里输入 <code>x/s 0x402400</code>，我们看到：<br><pre><code class="highlight plaintext">(gdb) x/s 0x402400
+0x402400:       &quot;Border relations with Canada have never been better.&quot;
+(gdb)</code></pre></p>
+<p>密码出来了，是 <code>Border relations with Canada have never been better.</code>（唐突鉴证不可避，，，）验证一下对不对：</p>
+<figure>
+  <img src="/2026/05/03/CSAPP-Bomb-Lab-%E5%88%9D%E6%8E%A2/defused.png" class="" title="gdb">
+  <figcaption>成功！</figcaption>
+</figure>
+
+<p>真是一场酣畅淋漓的逆向工程体验啊。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1330,107 +1502,6 @@ Console.WriteLine(<span class="string">"Pi = {0}, time = {1}ms"</span>, PI, watc
 }</code></pre>
 <p>原因是每个线程每次累计一次 <code>circleCount</code> 都要调用一次 <code>Interlocked</code> 方法，导致线程之间产生锁竞争，大幅降低并发性能。</p>
 <p>修复方案就是给单个线程分配一个局部的计数器 <code>localCount</code>，等各线程累计结束之后再调用原子操作。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://bluemicro233.github.io/2025/12/02/%E3%82%8B%E3%82%8B%E3%81%A1%E3%82%83%E3%82%93%E3%81%AE%E8%87%AA%E6%AE%BA%E9%85%8D%E4%BF%A1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="布朗尼蛋糕">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="布朗尼的小屋">
-      <meta itemprop="description" content="闲人">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | 布朗尼的小屋">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/12/02/%E3%82%8B%E3%82%8B%E3%81%A1%E3%82%83%E3%82%93%E3%81%AE%E8%87%AA%E6%AE%BA%E9%85%8D%E4%BF%A1/" class="post-title-link" itemprop="url">るるちゃんの自殺配信</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2025-12-02 22:41:35 / 修改时间：22:46:20" itemprop="dateCreated datePublished" datetime="2025-12-02T22:41:35+08:00">2025-12-02</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>友達ができない帰り道</p>
-<p>夕暮れはときどき優しく</p>
-<p>飛び交うデータの中で</p>
-<p>街のブルートゥースが　あたしを壊した</p>
-<p>中央線に飛び込んで　傍迷惑な奴だと言われて</p>
-<p>いつだってそこにいたんだ　少女はさっさと死んじゃった</p>
-<p>FBIに聞いたって　わかんない彼女のメーセージ</p>
-<p>いつだって叫んでたんだって</p>
-<p>チャネリングで夜空広げてく</p>
-<p>野良猫とワルツを踊った</p>
-<p>飛び交うデータの中で</p>
-<p>街のブルートゥースがあたしを壊した</p>
-<p>UFOに飛び乗って　反抗期じゃないよママ聞いて</p>
-<p>いつだって1人でいたんだ　少女はさっさと死んじゃった</p>
-<p>FBIに聞いたって　わかんない彼女のメーセージ</p>
-<p>いつだって叫んでたんだって</p>
-<p>受験勉強が終わったら</p>
-<p>ネコと話す魔女さ</p>
-<p>自殺配信してお墓でも立てよ</p>
-<p>この最低な気持ちなくなる前に</p>
-<p>中央線に飛び込んで　傍迷惑な奴だと言われて</p>
-<p>いつだってそこにいたんだ　少女はさっさと死んじゃった</p>
-<p>屋根の上で猫たちと　頭が悪い人間見下して</p>
-<p>いつだって叫んでたんだって</p>
-<p>受験勉強が終わったら</p>
-<p>ネコと話す魔女さ</p>
-<p>自殺配信してお墓でも立てよ</p>
-<p>この最低な気持ちなくなる前に</p>
-<p>中央線に飛び込んで　傍迷惑な奴だと言われて</p>
-<p>いつだってそこにいたんだ　少女はさっさと死んじゃった</p>
-<p>FBIに聞いたって　わかんない彼女のメーセージ</p>
-<p>いつだって叫んでたんだって</p>
 
       
     </div>
