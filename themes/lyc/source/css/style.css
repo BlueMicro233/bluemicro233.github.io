@@ -366,6 +366,17 @@ article .content .video-container object {
   height: 100%;
 }
 
+.math-display {
+  display: block;
+  margin: 1.25rem 0;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.math-display mjx-container[display="true"] {
+  margin: 0 !important;
+}
+
 /* Tags / categories ------------------------------------------------------ */
 .article-tag, .article-category { display: inline; font-size: .85rem; }
 .article-tag .tag-link,

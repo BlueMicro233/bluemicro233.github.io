@@ -75,11 +75,18 @@ mathjax: true
 
 ## 部署
 
-1. 修改 `_config.yml` 中的 `url` 为线上域名。
-2. 执行 `npm run build`，将 `public/` 部署到任意静态托管（GitHub Pages、Cloudflare Pages、Vercel、Nginx 等）。
-3. 也可以安装对应 deployer 插件，在 `_config.yml` 的 `deploy` 中配置后执行 `npm run deploy`。
+当前线上地址：<https://bluemicro233.github.io/>
+
+- 源码在 `hexo-source` 分支，部署后的静态站点在 `main` 分支。
+- 推送到 `hexo-source` 后，`.github/workflows/deploy.yml` 会自动执行 `npm ci`、`hexo generate`，并把 `public/` 覆盖推到 `main`（每次使用全新的孤儿提交，避免旧内容留在历史里）。
+- 本地手动部署：`npm run build`，然后把 `public/` 的内容提交到 `main`。
+- 修改站点域名时同步修改 `_config.yml` 的 `url`。
 
 > 部署时请确保服务器为 `.xml` 文件返回 `charset=utf-8`（Nginx 可配置 `charset utf-8;`）。本地 `hexo server` 已通过 `themes/lyc/scripts/server.js` 自动补上，否则部分浏览器直接打开 `atom.xml` 时会按 Latin-1 解码而显示乱码。
+
+## 数学公式
+
+支持 `$...$`、`$$...$$`、`\(...\)`、`\[...\]`，显示公式不需要手动包 `<div>`；行内矩阵可以跨行书写，`\\` 不会被 Markdown 破坏。页面中检测到公式时会自动加载 MathJax，代码块里的 `$` 不会被当成公式。
 
 ## 说明
 

@@ -40,7 +40,12 @@
 <%- css('css/light.css') %>
 <link rel="alternate" href="<%- url_for('/atom.xml') %>" title="<%= config.title %>" type="application/atom+xml">
 
-<% if (page.mathjax) { %>
+<% var mathSource = String(page.content || '')
+  .replace(/<pre[\s\S]*?<\/pre>/gi, ' ')
+  .replace(/<code[\s\S]*?<\/code>/gi, ' ');
+%>
+<% var pageHasMath = page.mathjax || /\$|\\\(|\\\[/.test(mathSource); %>
+<% if (pageHasMath) { %>
 <script>
   window.MathJax = {
     tex: {

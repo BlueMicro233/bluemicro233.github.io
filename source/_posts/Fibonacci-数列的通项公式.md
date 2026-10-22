@@ -20,22 +20,22 @@ Fibonacci 数列的递推公式为：
 上式可以用矩阵表示：
 
 <div>
-    $$
-    \begin{pmatrix}  
-    F_{n+1} \\  
-    F_{n}   
-    \end{pmatrix} 
-    =
-    \begin{pmatrix}  
-    1 & 1 \\  
-    1 & 0  
-    \end{pmatrix} 
+$$
+\begin{pmatrix}  
+F_{n+1} \\  
+F_{n}   
+\end{pmatrix} 
+=
+\begin{pmatrix}  
+1 & 1 \\  
+1 & 0  
+\end{pmatrix} 
 
-    \begin{pmatrix}  
-    F_n \\  
-    F_{n-1}   
-    \end{pmatrix} 
-    $$
+\begin{pmatrix}  
+F_n \\  
+F_{n-1}   
+\end{pmatrix} 
+$$
 </div>
 
 ## 求解方法
