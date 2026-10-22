@@ -277,6 +277,13 @@ article header .posttitle {
   font-size: 1.5em;
   line-height: 1.35;
 }
+
+/* The article body also uses .content; don't inherit the page-level flex/min-height. */
+article .content {
+  display: block;
+  min-height: 0;
+  flex: none;
+}
 article header .meta {
   display: flex;
   flex-wrap: wrap;
