@@ -1,0 +1,15 @@
+<section id="categories">
+  <span class="h1"><a href="<%- url_for('/categories/') %>">Category</a></span>
+  <% if (site.categories.length) { %>
+  <ul class="category-list">
+    <% site.categories.sort('name').each(function (category) { %>
+    <li class="category-list-item">
+      <a href="<%- url_for(category.path) %>"><%= category.name %></a>
+      <span class="category-list-count"><%= category.length %></span>
+    </li>
+    <% }) %>
+  </ul>
+  <% } else { %>
+  <p class="empty-hint">这里还没有分类，可以先看看 <a href="<%- url_for('/tags/') %>">标签</a>。</p>
+  <% } %>
+</section>

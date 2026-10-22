@@ -1,0 +1,22 @@
+<% var tocHtml = page.content ? toc(page.content, { list_number: false }) : ''; %>
+<div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" style="display:none"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="actions">
+      <ul>
+        <% if (page.prev) { %>
+        <li><a class="icon" href="<%- url_for(page.prev.path) %>" aria-label="Previous post" title="<%= page.prev.title %>"><i class="fa-solid fa-chevron-left"></i></a></li>
+        <% } %>
+        <% if (page.next) { %>
+        <li><a class="icon" href="<%- url_for(page.next.path) %>" aria-label="Next post" title="<%= page.next.title %>"><i class="fa-solid fa-chevron-right"></i></a></li>
+        <% } %>
+        <li><a class="icon" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="Back to top" title="Back to top"><i class="fa-solid fa-chevron-up"></i></a></li>
+        <li><a class="icon" href="#" id="share-link" aria-label="Copy link" title="Copy link"><i class="fa-solid fa-link"></i></a></li>
+      </ul>
+    </span>
+    <% if (tocHtml) { %>
+    <div id="toc"><%- tocHtml %></div>
+    <% } %>
+  </span>
+</div>

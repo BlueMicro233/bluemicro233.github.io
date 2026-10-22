@@ -1,0 +1,27 @@
+{
+  "name": "brownie-blog",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Brownie's blog powered by Hexo",
+  "scripts": {
+    "start": "hexo server",
+    "dev": "hexo server",
+    "build": "hexo generate",
+    "clean": "hexo clean",
+    "deploy": "hexo deploy"
+  },
+  "hexo": {
+    "version": "7.3.0"
+  },
+  "dependencies": {
+    "hexo": "^7.3.0",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-feed": "^3.0.0",
+    "hexo-generator-index": "^4.0.0",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-ejs": "^2.0.0",
+    "hexo-renderer-marked": "^6.3.0",
+    "hexo-server": "^3.0.0"
+  }
+}

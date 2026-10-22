@@ -1,0 +1,21 @@
+<% if (page.current === 1) { %>
+<section id="about" class="p-note">
+  <%- theme.about %>
+</section>
+<% } %>
+<% if (theme.show_writing) { %>
+<section id="writing">
+  <span class="h1"><a href="<%- url_for('/archives/') %>">Writing</a></span>
+  <ul class="post-list">
+    <% page.posts.each(function (post) { %>
+    <li class="post-item">
+      <div class="meta">
+        <time datetime="<%- date_xml(post.date) %>" class="dt-published"><%= date(post.date, 'YYYY-MM-DD') %></time>
+      </div>
+      <span><a href="<%- url_for(post.path) %>"><%= post.title %></a></span>
+    </li>
+    <% }) %>
+  </ul>
+  <%- partial('_partial/pagination') %>
+</section>
+<% } %>

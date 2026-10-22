@@ -1,0 +1,24 @@
+<section id="categories">
+  <% if (page.category) { %>
+  <span class="h1"><a href="<%- url_for('/categories/') %>">Category</a> <span class="archive-filter">/ <%= page.category %></span></span>
+  <ul class="post-list">
+    <% page.posts.each(function (post) { %>
+    <li class="post-item">
+      <div class="meta"><time datetime="<%- date_xml(post.date) %>"><%= date(post.date, 'YYYY-MM-DD') %></time></div>
+      <span><a href="<%- url_for(post.path) %>"><%= post.title %></a></span>
+    </li>
+    <% }) %>
+  </ul>
+  <%- partial('_partial/pagination') %>
+  <% } else { %>
+  <span class="h1"><a href="<%- url_for('/categories/') %>">Category</a></span>
+  <ul class="category-list">
+    <% site.categories.sort('name').each(function (category) { %>
+    <li class="category-list-item">
+      <a href="<%- url_for(category.path) %>"><%= category.name %></a>
+      <span class="category-list-count"><%= category.length %></span>
+    </li>
+    <% }) %>
+  </ul>
+  <% } %>
+</section>

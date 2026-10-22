@@ -1,0 +1,14 @@
+<% var tocHtml = page.content ? toc(page.content, { list_number: false }) : ''; %>
+<div id="footer-post-container">
+  <div id="footer-post">
+    <% if (tocHtml) { %>
+    <div id="toc-footer" class="footer-panel" style="display:none"><%- tocHtml %></div>
+    <% } %>
+    <div id="actions-footer">
+      <% if (tocHtml) { %>
+      <a class="icon" href="#" id="footer-toc"><i class="fa-solid fa-list fa-lg"></i> TOC</a>
+      <% } %>
+      <a class="icon" href="#" id="footer-top" style="display:none"><i class="fa-solid fa-chevron-up fa-lg"></i> Top</a>
+    </div>
+  </div>
+</div>

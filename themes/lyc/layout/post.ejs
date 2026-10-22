@@ -1,0 +1,40 @@
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    <h1 class="posttitle p-name" itemprop="name headline"><%= page.title %></h1>
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author"><%= config.author %></span>
+      <div class="postdate">
+        <time datetime="<%- date_xml(page.date) %>" class="dt-published" itemprop="datePublished"><%= date(page.date, 'YYYY-MM-DD') %></time>
+      </div>
+      <% if (page.categories && page.categories.length) { %>
+      <div class="article-category" itemprop="articleSection">
+        <i class="fa-solid fa-archive"></i> <%- category_links(page.categories) %>
+      </div>
+      <% } %>
+      <div class="article-readtime"><i class="fa-regular fa-clock"></i> <%= reading_time(page.content) %> min read</div>
+    </div>
+  </header>
+  <div class="content e-content" itemprop="articleBody">
+    <%- page.content %>
+  </div>
+  <% if (page.tags && page.tags.length) { %>
+  <footer class="post-footer">
+    <div class="article-tag"><i class="fa-solid fa-tags"></i> <%- tag_links(page.tags) %></div>
+  </footer>
+  <% } %>
+</article>
+
+<nav class="post-nav">
+  <% if (page.prev) { %>
+  <a class="post-nav-prev" href="<%- url_for(page.prev.path) %>">
+    <span class="post-nav-label"><i class="fa-solid fa-chevron-left"></i> Previous</span>
+    <span class="post-nav-title"><%= page.prev.title %></span>
+  </a>
+  <% } %>
+  <% if (page.next) { %>
+  <a class="post-nav-next" href="<%- url_for(page.next.path) %>">
+    <span class="post-nav-label">Next <i class="fa-solid fa-chevron-right"></i></span>
+    <span class="post-nav-title"><%= page.next.title %></span>
+  </a>
+  <% } %>
+</nav>

@@ -1,0 +1,11 @@
+<section id="search">
+  <span class="h1">Search</span>
+  <input id="search-input" class="search-input" type="search" placeholder="Search..." autocomplete="off" autofocus>
+  <div id="search-result">
+    <ul class="search-result-list"></ul>
+  </div>
+  <p class="search-no-result" id="search-no-result" style="display:none">没有找到相关文章.</p>
+</section>
+<script>
+  window.__SEARCH_URL__ = '<%- url_for("/search.json") %>';
+</script>

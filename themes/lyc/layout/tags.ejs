@@ -1,0 +1,6 @@
+<section id="tag-cloud">
+  <span class="h1"><a href="<%- url_for('/tags/') %>">Tag</a></span>
+  <div class="tag-cloud-tags">
+    <%- tagcloud({ min_font: 12, max_font: 22, unit: 'px', color: false, orderby: 'count', order: -1, show_count: true, count_class: 'tag-cloud-count' }) %>
+  </div>
+</section>

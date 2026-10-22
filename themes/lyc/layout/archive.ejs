@@ -1,0 +1,31 @@
+<section id="archive">
+  <span class="h1">
+    <a href="<%- url_for('/archives/') %>">Writing</a><% if (page.year) { %> <span class="archive-filter">/ <%= page.year %><% if (page.month) { %>-<%= String(page.month).padStart(2, '0') %><% } %></span><% } %>
+  </span>
+
+  <% if (page.year) { %>
+  <ul class="post-list">
+    <% page.posts.each(function (post) { %>
+    <li class="post-item">
+      <div class="meta"><time datetime="<%- date_xml(post.date) %>"><%= date(post.date, 'YYYY-MM-DD') %></time></div>
+      <span><a href="<%- url_for(post.path) %>"><%= post.title %></a></span>
+    </li>
+    <% }) %>
+  </ul>
+  <% } else { %>
+    <% var groups = {}; page.posts.each(function (post) { var year = date(post.date, 'YYYY'); (groups[year] = groups[year] || []).push(post); }); %>
+    <% Object.keys(groups).sort().reverse().forEach(function (year) { %>
+    <h2 class="archive-year"><%= year %></h2>
+    <ul class="post-list">
+      <% groups[year].forEach(function (post) { %>
+      <li class="post-item">
+        <div class="meta"><time datetime="<%- date_xml(post.date) %>"><%= date(post.date, 'MM-DD') %></time></div>
+        <span><a href="<%- url_for(post.path) %>"><%= post.title %></a></span>
+      </li>
+      <% }) %>
+    </ul>
+    <% }) %>
+  <% } %>
+
+  <%- partial('_partial/pagination') %>
+</section>

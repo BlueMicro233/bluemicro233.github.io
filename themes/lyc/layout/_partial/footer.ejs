@@ -1,0 +1,14 @@
+<footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; <%= theme.copyright.since %>-<%= new Date().getFullYear() %> <%= theme.copyright.name %>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <% Object.keys(theme.menu).forEach(function (label) { var path = theme.menu[label]; %>
+        <li><a href="<%- url_for(path) %>"<% if (is_active(path)) { %> class="active"<% } %>><%= label %></a></li>
+        <% }) %>
+      </ul>
+    </nav>
+  </div>
+</footer>

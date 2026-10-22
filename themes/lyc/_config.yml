@@ -1,0 +1,28 @@
+# Theme configuration
+
+# Avatar shown in the site header
+avatar: /images/91715384.png
+
+# Navigation menu (label: path)
+menu:
+  Home: /
+  About: /about/
+  Writing: /archives/
+  Tags: /tags/
+  Friends: /links/
+  Search: /search/
+
+# Intro shown on the home page. HTML is allowed.
+about: |
+  <p>Hi there, 来这里坐一坐吧。</p>
+  <p>这里将会记录一些东西。<br>如果你有兴趣了解我, see <a href="/about/">More&gt;</a></p>
+
+# Copyright info in the footer
+copyright:
+  since: 2025
+  name: 布朗尼蛋糕
+
+# Show the "Writing" section on the home page
+show_writing: true
+
+# Number of posts shown in the home page writing list (handled by index_generator)

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="<%= config.language || 'zh-Hans' %>">
+<head>
+  <%- partial('_partial/head') %>
+</head>
+<body class="max-width mx-auto px3 ltr<%= page.layout === 'post' ? ' post-page' : '' %>">
+  <%- partial('_partial/theme-toggle') %>
+  <% if (page.layout === 'post') { %>
+  <%- partial('_partial/post-aside') %>
+  <% } %>
+  <div class="content index py4 h-card">
+    <% if (page.layout !== 'post') { %>
+    <%- partial('_partial/header') %>
+    <% } %>
+    <%- body %>
+    <%- partial('_partial/footer') %>
+  </div>
+  <% if (page.layout === 'post') { %>
+  <%- partial('_partial/post-footer-mobile') %>
+  <% } %>
+  <%- js('js/main.js') %>
+</body>
+</html>
