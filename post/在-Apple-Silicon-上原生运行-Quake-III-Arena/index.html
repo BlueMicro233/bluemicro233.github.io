@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>在 Apple Silicon 上原生运行《雷神之锤 3》 · BrownieCake's</title>
+<meta name="description" content="布朗尼蛋糕的个人博客，记录学习笔记、技术折腾与一些胡思乱想。">
+<meta name="theme-color" content="#1d1f21">
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', '#e2e0de');
+      }
+    } catch (error) { /* localStorage may be unavailable */ }
+  })();
+</script>
+<link rel="canonical" href="https://bluemicro233.github.io/post/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Apple Silicon 上原生运行《雷神之锤 3》">
+<meta property="og:url" content="https://bluemicro233.github.io/post/%E5%9C%A8-Apple-Silicon-%E4%B8%8A%E5%8E%9F%E7%94%9F%E8%BF%90%E8%A1%8C-Quake-III-Arena/">
+<meta property="og:site_name" content="BrownieCake&#39;s">
+<meta property="og:description" content="布朗尼蛋糕的个人博客，记录学习笔记、技术折腾与一些胡思乱想。">
+<meta property="og:locale" content="zh_CN">
+
+<meta property="article:published_time" content="2025-11-29T15:19:19.000Z">
+<meta property="article:modified_time" content="2026-10-22T18:48:07.529Z">
+<meta property="article:author" content="布朗尼蛋糕">
+
+<meta name="twitter:card" content="summary">
+
+<link rel="shortcut icon" href="/images/91715384.png">
+<link rel="icon" type="image/png" href="/images/91715384.png">
+<link rel="apple-touch-icon" href="/images/91715384.png">
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<link rel="stylesheet" href="/css/light.css">
+
+<link rel="alternate" href="/atom.xml" title="BrownieCake&#39;s" type="application/atom+xml">
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="max-width mx-auto px3 ltr post-page">
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换到浅色模式" title="切换到浅色模式" aria-pressed="false">
+  <i class="fa-solid fa-sun theme-icon-sun" aria-hidden="true"></i>
+  <i class="fa-solid fa-moon theme-icon-moon" aria-hidden="true"></i>
+</button>
+
+  
+  
+<div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" style="display:none"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/post/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/" aria-label="Previous post" title="蒙特卡洛方法"><i class="fa-solid fa-chevron-left"></i></a></li>
+        
+        
+        <li><a class="icon" href="/post/%E8%9B%8B%E7%96%BC/" aria-label="Next post" title="蛋疼"><i class="fa-solid fa-chevron-right"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="Back to top" title="Back to top"><i class="fa-solid fa-chevron-up"></i></a></li>
+        <li><a class="icon" href="#" id="share-link" aria-label="Copy link" title="Copy link"><i class="fa-solid fa-link"></i></a></li>
+      </ul>
+    </span>
+    
+    <div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="toc-text">前置工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="toc-text">进一步配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%92%88%E5%AF%B9-macOS-26-%E6%B2%A1%E6%9C%89%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">针对 macOS 26 没有声音的问题</span></a></li></ol></div>
+    
+  </span>
+</div>
+
+  
+  <div class="content index py4 h-card">
+    
+    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    <h1 class="posttitle p-name" itemprop="name headline">在 Apple Silicon 上原生运行《雷神之锤 3》</h1>
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author">布朗尼蛋糕</span>
+      <div class="postdate">
+        <time datetime="2025-11-29T15:19:19.000Z" class="dt-published" itemprop="datePublished">2025-11-29</time>
+      </div>
+      
+      <div class="article-readtime"><i class="fa-regular fa-clock"></i> 1 min read</div>
+    </div>
+  </header>
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a>前置工作</h2><ol>
+<li><p>一份在 Windows 平台下载的原版 Quake III Arena 的游戏文件。 </p>
+</li>
+<li><p>在 ioquake3.org&#x2F;get-it&#x2F; 下载一份<strong>基于 Universal 2 Build</strong> 的 macOS build 文件。</p>
+</li>
+<li><p>在 ioquake3.org&#x2F;extras&#x2F;patch-data 下载一个 zip 文件（将自动解压为 quake3-latest-pk3s 文件夹）。</p>
+</li>
+</ol>
+<p>这两个部分准备好了，就可以正式安装了。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li><p>在“应用程序”文件夹中创建一个名为 ioquake3 的文件夹。</p>
+</li>
+<li><p>将下载的文件（ioquake3.app）移动到刚刚创建的 ioquake3 文件夹内。</p>
+</li>
+<li><p>把下载的 quake3-latest-pk3s 文件夹内的两个文件夹解压至 ioquake3 文件夹内。</p>
+</li>
+<li><p>把 Windows 上的 pak0.pk3 资产文件复制下来，并且转移到 mac 上。</p>
+</li>
+</ol>
+<h2 id="进一步配置"><a href="#进一步配置" class="headerlink" title="进一步配置"></a>进一步配置</h2><p>运行 ioquake3 进入游戏，它会提示输入 CD-KEY，可以直接回车键跳过。</p>
+<p>此时，屏幕分辨率是个问题，并且有人可能还不在全屏模式，需要在控制台调整。<strong>id tech 引擎呼出控制台为 <code>~</code> 键。</strong></p>
+<p>我的 MacBook Air 的分辨率是 2560*1664，所以逐个输入以下指令：</p>
+<p><code>/r_mode -1</code></p>
+<p><code>/r_customheight 1664</code></p>
+<p><code>/r_customwidth 2560</code></p>
+<p>应用分辨率，输入：</p>
+<p><code>/vid_restart</code></p>
+<p>并且还需要进入全屏模式，所以需要输入：</p>
+<p><code>/r_fullscreen 1</code></p>
+<p>至此，游戏配置就差不多了。我们还可以在自带的 SYSTEM 设置里设置画质，例如纹理过滤模式、光照模式、几何细节等等。</p>
+<h2 id="针对-macOS-26-没有声音的问题"><a href="#针对-macOS-26-没有声音的问题" class="headerlink" title="针对 macOS 26 没有声音的问题"></a>针对 macOS 26 没有声音的问题</h2><p>在 macOS 26 上运行具有 OpenAL 音频库的程序存在兼容性问题，于是游戏无法正常播放声音。解决方法也很简单，只需输入以下指令禁用 OpenAL 库并应用：</p>
+<p><code>/s_useOpenAL 0</code></p>
+<p><code>/snd_restart</code></p>
+
+  </div>
+  
+  <footer class="post-footer">
+    <div class="article-tag"><i class="fa-solid fa-tags"></i> <a class="tag-link" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a></div>
+  </footer>
+  
+</article>
+
+<nav class="post-nav">
+  
+  <a class="post-nav-prev" href="/post/%E8%92%99%E7%89%B9%E5%8D%A1%E6%B4%9B%E6%96%B9%E6%B3%95/">
+    <span class="post-nav-label"><i class="fa-solid fa-chevron-left"></i> Previous</span>
+    <span class="post-nav-title">蒙特卡洛方法</span>
+  </a>
+  
+  
+  <a class="post-nav-next" href="/post/%E8%9B%8B%E7%96%BC/">
+    <span class="post-nav-label">Next <i class="fa-solid fa-chevron-right"></i></span>
+    <span class="post-nav-title">蛋疼</span>
+  </a>
+  
+</nav>
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2025-2026 布朗尼蛋糕
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+        <li><a href="/archives/">Writing</a></li>
+        
+        <li><a href="/tags/">Tags</a></li>
+        
+        <li><a href="/links/">Friends</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+  </div>
+  
+  
+<div id="footer-post-container">
+  <div id="footer-post">
+    
+    <div id="toc-footer" class="footer-panel" style="display:none"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="toc-text">前置工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%85%8D%E7%BD%AE"><span class="toc-text">进一步配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%92%88%E5%AF%B9-macOS-26-%E6%B2%A1%E6%9C%89%E5%A3%B0%E9%9F%B3%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">针对 macOS 26 没有声音的问题</span></a></li></ol></div>
+    
+    <div id="actions-footer">
+      
+      <a class="icon" href="#" id="footer-toc"><i class="fa-solid fa-list fa-lg"></i> TOC</a>
+      
+      <a class="icon" href="#" id="footer-top" style="display:none"><i class="fa-solid fa-chevron-up fa-lg"></i> Top</a>
+    </div>
+  </div>
+</div>
+
+  
+  
+<script src="/js/main.js"></script>
+
+</body>
+</html>
