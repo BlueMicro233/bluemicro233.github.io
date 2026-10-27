@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>最近阅读的计算机书籍 · BrownieCake's</title>
+<meta name="description" content="布朗尼蛋糕的个人博客，记录学习笔记、技术折腾与一些胡思乱想。">
+<meta name="theme-color" content="#1d1f21">
+<meta name="color-scheme" content="dark light">
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem('theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', '#e2e0de');
+      }
+    } catch (error) { /* localStorage may be unavailable */ }
+  })();
+</script>
+<link rel="canonical" href="https://bluemicro233.github.io/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="最近阅读的计算机书籍">
+<meta property="og:url" content="https://bluemicro233.github.io/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/">
+<meta property="og:site_name" content="BrownieCake&#39;s">
+<meta property="og:description" content="布朗尼蛋糕的个人博客，记录学习笔记、技术折腾与一些胡思乱想。">
+<meta property="og:locale" content="zh_CN">
+
+<meta property="article:published_time" content="2026-10-26T08:42:10.000Z">
+<meta property="article:modified_time" content="2026-10-27T15:06:26.180Z">
+<meta property="article:author" content="布朗尼蛋糕">
+
+<meta name="twitter:card" content="summary">
+
+<link rel="shortcut icon" href="/images/91715384.png">
+<link rel="icon" type="image/png" href="/images/91715384.png">
+<link rel="apple-touch-icon" href="/images/91715384.png">
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+<link rel="stylesheet" href="/css/light.css">
+
+<link rel="alternate" href="/atom.xml" title="BrownieCake&#39;s" type="application/atom+xml">
+
+
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      tags: 'none'
+    },
+    svg: { fontCache: 'global' },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+      ignoreHtmlClass: 'no-mathjax'
+    }
+  };
+</script>
+<script defer src="/lib/mathjax/tex-svg.js"></script>
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body class="max-width mx-auto px3 ltr post-page">
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换到浅色模式" title="切换到浅色模式" aria-pressed="false">
+  <i class="fa-solid fa-sun theme-icon-sun" aria-hidden="true"></i>
+  <i class="fa-solid fa-moon theme-icon-moon" aria-hidden="true"></i>
+</button>
+
+  
+  
+<div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" style="display:none"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/post/Linearly-Transformed-Cosines-%E7%9A%84%E6%95%B0%E5%AD%A6%E5%8A%A8%E6%9C%BA/" aria-label="Next post" title="Linearly Transformed Cosines 的数学动机"><i class="fa-solid fa-chevron-right"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" aria-label="Back to top" title="Back to top"><i class="fa-solid fa-chevron-up"></i></a></li>
+        <li><a class="icon" href="#" id="share-link" aria-label="Copy link" title="Copy link"><i class="fa-solid fa-link"></i></a></li>
+      </ul>
+    </span>
+    
+    <div id="toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E5%AD%90"><span class="toc-text">引子</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80"><span class="toc-text">计算机基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%AC%E8%B4%A8-%E2%80%94%E2%80%94%E3%80%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9E%84%E9%80%A0%E5%92%8C%E8%A7%A3%E9%87%8A%E3%80%8B"><span class="toc-text">程序的本质 ——《计算机程序的构造和解释》</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3%E9%80%92%E5%BD%92"><span class="toc-text">重新理解递归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8B%AC%E7%89%B9%E7%9A%84%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84"><span class="toc-text">独特的程序结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8%E7%9A%84%E9%AD%94%E6%B3%95"><span class="toc-text">解释器的魔法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BB%E7%A9%BF%E9%BB%91%E7%9B%92-%E2%80%94%E2%80%94%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B"><span class="toc-text">击穿黑盒 ——《深入理解计算机系统》</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%9C%A8%E5%85%B7%E4%BD%93%E7%9A%84%E6%9C%BA%E5%99%A8%E4%B8%8A"><span class="toc-text">工作在具体的机器上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%AB%E6%B8%B8%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F"><span class="toc-text">漫游计算机系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E5%A5%BD%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%85%A5%E9%97%A8-%E2%80%94%E2%80%94%E3%80%8A%E7%AE%97%E6%B3%95%EF%BC%88%E7%AC%AC%E5%9B%9B%E7%89%88%EF%BC%89%E3%80%8B"><span class="toc-text">更好的算法和数据结构入门 ——《算法（第四版）》</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E5%AD%A6"><span class="toc-text">图形学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8%E5%9C%A3%E7%BB%8F-%E2%80%94%E2%80%94-%E8%99%8E%E4%B9%A6"><span class="toc-text">图形学入门圣经 —— 虎书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E5%9C%A3%E7%BB%8F-%E2%80%94%E2%80%94-%E3%80%8A%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E3%80%8B"><span class="toc-text">实时渲染圣经 —— 《实时渲染》</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E6%B8%B2%E6%9F%93%E5%9C%A3%E7%BB%8F-%E2%80%94%E2%80%94%E3%80%8A%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E6%B8%B2%E6%9F%93%EF%BC%9A%E4%BB%8E%E7%90%86%E8%AE%BA%E5%88%B0%E5%AE%9E%E7%8E%B0"><span class="toc-text">离线渲染圣经 ——《基于物理的渲染：从理论到实现</span></a></li></ol></li></ol></div>
+    
+  </span>
+</div>
+
+  
+  <div class="content index py4 h-card">
+    
+    <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    <h1 class="posttitle p-name" itemprop="name headline">最近阅读的计算机书籍</h1>
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author">布朗尼蛋糕</span>
+      <div class="postdate">
+        <time datetime="2026-10-26T08:42:10.000Z" class="dt-published" itemprop="datePublished">2026-10-26</time>
+      </div>
+      
+      <div class="article-readtime"><i class="fa-regular fa-clock"></i> 6 min read</div>
+    </div>
+  </header>
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="引子"><a href="#引子" class="headerlink" title="引子"></a>引子</h1><p>LLM 可以帮我解决很多知识和实践问题，但几乎都出现在一些随机的碎片化场景。有时候，自己确实通过 LLM 知道了一些特定的问题怎么解决，但事实上却<strong>把判断和思考外包给了 LLM</strong>。为了和这种倾向对抗，在学习具体技术和工具使用之余，还打算培养一下自己的计算机科学素质。</p>
+<p>这篇文章将会介绍一些我认为在时代变革中仍具丰富价值的领域经典，这些书在最近 1 年内都或多或少地陪伴过我一段时间。也相当于是做个书评了。</p>
+<blockquote>
+<p>当然，我并没有全数读完，初学者一个，并且我也不是计算机专业学生。不过我能保证我确实从这些书里获得了很多体验。</p>
+</blockquote>
+<p>本文分别从两个层面推荐几本书：<strong>1. 计算机基础 2. 图形学</strong>。</p>
+<h1 id="计算机基础"><a href="#计算机基础" class="headerlink" title="计算机基础"></a>计算机基础</h1><h2 id="程序的本质-——《计算机程序的构造和解释》"><a href="#程序的本质-——《计算机程序的构造和解释》" class="headerlink" title="程序的本质 ——《计算机程序的构造和解释》"></a>程序的本质 ——《计算机程序的构造和解释》</h2><p>《计算机程序的构造和解释》（SICP）这本书是麻省理工学院 6.001 课程的教材，自 1980 年到 2008 年被持续使用。这本书利用 Lisp 编程语言介绍计算机程序的各种伟大思想，可谓是计算机科学领域的哲学书。</p>
+<p>当代编程语言的 lambda 表达式、高阶函数、闭包、惰性求值、垃圾回收等特性就是在重新实现 SICP 里描述过的东西。</p>
+<blockquote>
+<p>MIT 现在改教 Python 了。同时 SICP 这门课在 <a target="_blank" rel="noopener" href="https://cs61a.org/fa26/">Berkeley</a> 和<a target="_blank" rel="noopener" href="https://sicp.pascal-lab.net/2026/">南京大学</a>等地的课程也正以 Python 的方式呈现。不过，个人认为 SICP 还是搭配 Lisp 更对味一点，可能因为我是以一种考古学的视角去看待的。</p>
+</blockquote>
+<figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/SICP.png" style="width: 300px;" alt="SICP">
+  <figcaption>SICP</figcaption>
+</figure>
+
+<h3 id="重新理解递归"><a href="#重新理解递归" class="headerlink" title="重新理解递归"></a>重新理解递归</h3><p>我是先学过了 C 和 C# 再去看的 SICP，于是非常有新鲜感。我们知道，如果你尝试在 C（或 C++ &#x2F; C# &#x2F; Java）里实现一个<strong>迭代</strong>计算 Fibonacci 通项的程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">fib</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span> a = <span class="number">0</span>, b = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="type">int</span> next = a + b;</span><br><span class="line">        a = b;</span><br><span class="line">        b = next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而 Lisp 里是没有显式寄存器变量的，同样的程序会写成：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">define</span> (<span class="name">fib</span> n)</span><br><span class="line">  (<span class="name">fib-iter</span> <span class="number">1</span> <span class="number">0</span> n))</span><br><span class="line"></span><br><span class="line">(<span class="name">define</span> (<span class="name">fib-iter</span> a b count)</span><br><span class="line">  (<span class="name">if</span> (<span class="name">=</span> count <span class="number">0</span>)</span><br><span class="line">      b</span><br><span class="line">      (<span class="name">fib-iter</span> (<span class="name">+</span> a b) a (<span class="name">-</span> count <span class="number">1</span>))))</span><br></pre></td></tr></table></figure>
+
+<p>这不是递归吗？怎么迭代了？我们知道递归计算 Fibonacci 通项的时间复杂度是指数级的 $O(\phi^n), \phi = \frac{1 + \sqrt{5}}{2}$，而实际上本文的这个 Lisp 程序的时间复杂度是线性的 $O(n)$。</p>
+<p>可以看出它没有直接把 $F(n) = F(n - 1) + F(n - 2)$ 这个递归的公式翻译上去，而是在线性地更新状态 <code>(a b count)</code> 到 <code>(a+b a count-1)</code>，最后 <code>(= count 0)</code> 时候返回，并没有产生 Fibonacci 调用树。也就是说递归语法和递归过程其实并不是一回事，递归语法可以产生迭代过程。这是读完 SICP 第一章就能领会的 —— <strong>直接看到程序的形式和本质的联系</strong>。</p>
+<h3 id="独特的程序结构"><a href="#独特的程序结构" class="headerlink" title="独特的程序结构"></a>独特的程序结构</h3><p>国内数据结构课很多使用的是严蔚敏老师的《数据结构（C 语言版）》紫皮书，它经常被诟病讲解晦涩和部分内容非主流（比如<strong>“广义表”</strong>、静态链表）。其实这本书里说的广义表就是 <code>(a b (c d) (e f g))</code> 这样的结构，Lisp 语言的表达式本身就是一种广义表（它叫 S-expression），从上面贴出的 Lisp 源码就可以看出这种独特的结构。</p>
+<p>而课上讲的 <code>Head()</code> 和 <code>Tail()</code> 就是 Lisp 里的 <code>car</code> 和 <code>cdr</code>，<del>在反直觉的同时又有种拙劣的模仿感233</del></p>
+<blockquote>
+<p>因为 <code>Head()</code> 是取表头元素，所以直觉告诉我们 <code>Tail()</code> 是取表尾元素，但实际上这本书规定的是去掉表头之后取整个表，这和 Lisp <code>cdr</code> 的功能一致。</p>
+<p>所以这本书讲“广义表”的迷惑之处就在于：在面向 C 程序设计的课程中，引入了一套与 Lisp 列表处理高度相关的抽象，却没有充分地建立两者之间的概念桥梁。</p>
+</blockquote>
+<h3 id="解释器的魔法"><a href="#解释器的魔法" class="headerlink" title="解释器的魔法"></a>解释器的魔法</h3><p>对于程序语言本身，SICP 还介绍了 eval-apply 循环，它揭示了<strong>一个程序语言可以解释它自己</strong>，听起来像魔法。这其实就是解释器（interpreter）的核心—— <code>eval</code> 负责解释表达式的含义，决定如何求值；而 <code>apply</code> 就负责执行相应的求值计算。</p>
+<figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/EVALAPPLY.png" style="width: 450px;" alt="SICP">
+  <figcaption>揭示了计算机程序本质的 eval-apply 循环</figcaption>
+</figure>
+
+<p>还有更多有趣东西可以探索！本文对 SICP 的介绍先说到这里了。</p>
+<p>总的来说，这本书对于只学过特定主流语言的人而言，无疑是一场大脑升级(,,,) <del>其实这隐含了一个你已经学过一门语言的前提，假如你是一个完完全全的编程新手，对程序语言的理解还是一张白纸，阅读这本书反而不会感到惊异。</del></p>
+<h2 id="击穿黑盒-——《深入理解计算机系统》"><a href="#击穿黑盒-——《深入理解计算机系统》" class="headerlink" title="击穿黑盒 ——《深入理解计算机系统》"></a>击穿黑盒 ——《深入理解计算机系统》</h2><p>此书就是大名鼎鼎的 <strong>CSAPP (Computer Systems: A Programmer’s Perspective)</strong> ，同时是<a target="_blank" rel="noopener" href="https://www.cs.cmu.edu/~213/">CMU 15-213 课程</a>的教材。</p>
+<p>这本书主要就是介绍计算机底层基础，把二进制、汇编、体系结构、链接和装载、虚拟内存、OS、网络这些知识都放进了一本书，相当于把几门零散的计算机核心专业课都拉通来整理了一遍，让人形成系统认识。</p>
+<blockquote>
+<p>具体的专业课程是一定比这本书介绍的相关主题更深入的（例如 jyyOS, CS61C 等）。而 CSAPP 以程序员的视角把基础知识串起来，能起到很好的预习作用。</p>
+</blockquote>
+<p>CSAPP 除了提供很多优质的小练习之外，还有几个著名的 Lab。这些 Lab 的难度很大，非常锻炼人，比如 Bomb Lab 就是让你使用 gdb 逆向一个二进制程序，通过研究反汇编来得到关卡的答案 <del>否则这个程序就要爆炸！砰！</del> ，我之前 <a href="https://bluemicro233.github.io/post/CSAPP-Bomb-Lab-%E5%88%9D%E6%8E%A2/">有一篇文章</a> 尝了下咸淡，确实挺有意思的。</p>
+<p>如果感兴趣或者时间充裕，这几个 Lab 是不容错过的，它们也是 CSAPP 的精髓。</p>
+<h3 id="工作在具体的机器上"><a href="#工作在具体的机器上" class="headerlink" title="工作在具体的机器上"></a>工作在具体的机器上</h3><p>看这个例子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1145141919</span> * <span class="number">1919810</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>理论上 <code>run()</code> 会计算出一个很大的数，但实际上控制台输出的是 <code>-1412353538</code>，并且在这之前，编译器就在抱怨了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Overflow.c:4:23: warning: overflow in expression; result is -1&#x27;412&#x27;353&#x27;538</span><br><span class="line">      with type &#x27;int&#x27; [-Winteger-overflow]</span><br><span class="line">    4 |     return 1145141919 * 1919810;</span><br><span class="line">      |            ~~~~~~~~~~~^~~~~~~~~</span><br><span class="line">1 warning generated.</span><br></pre></td></tr></table></figure>
+
+<p>这是 32 位整数溢出的结果，如果你经常看科普视频或者评论区，一定或多或少了解过，而 CSAPP 就会从底层（甚至会提及抽象代数）出发解释这些现象的原因和规律。</p>
+<p>由于现在的框架过于抽象、电脑内部过于精巧和复杂，以至于我们很多时候都忘了软件是真真实实地跑在粗犷的数字电路器件上的。数学是理想，物理是现实，为了实现计算，必要的设计限制一定是存在的，而我们至少要对这些限制知情，以更好地使用机器。</p>
+<h3 id="漫游计算机系统"><a href="#漫游计算机系统" class="headerlink" title="漫游计算机系统"></a>漫游计算机系统</h3><p>这其实是 CSAPP 第一章的标题，倒不如说整本书都在漫游计算机系统。</p>
+<p>我同时还算半个垃圾佬，对硬件 DIY 也感兴趣，关注了很多这个领域的 up 主。硬件 DIY 可以说就是能直接摸（包括物理上）到计算机系统了，所以阅读 CSAPP 对成为一个资深垃圾佬也很有帮助（存疑（（（</p>
+<p>最近看到极客湾发了一期视频： <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1kMxM6FECM/">《旗舰手机芯片大横评：苹果高通发哥玄戒谁最强？》</a> ，内容做的相当硬核，从缓存、虚拟内存机制、TLB 的角度分析骁龙 8 Elite Extreme Gen6 的性能问题：</p>
+<figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/gkw1.png" style="width: 600px;" alt="gkw">
+  <figcaption>虚拟内存机制</figcaption>
+</figure>
+
+<figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/gkw2.png" style="width: 600px;" alt="gkw">
+  <figcaption>TLB 与页表</figcaption>
+</figure>
+
+<figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/gkw3.png" style="width: 600px;" alt="gkw">
+  <figcaption>骁龙 8EE6 的 TLB</figcaption>
+</figure>
+
+<p>这部分实际上就属于 OS 和组成原理&#x2F;体系结构的交叉。极客湾这个视频还出现了四路组相连的缓存设计（4-way set associative cache，如上图 A B C D 为一组所示，虽然视频没有明确说出这个名词）</p>
+<p>以上的内容（包括那一整期视频），如果你暂时觉得晕头转向，而你又很感兴趣，那么 CSAPP 简直就是你的必读之书！你真的会知道这些硬核的知识这意味着什么。CSAPP 的第六章 <strong>存储器层次结构</strong> 和第九章 <strong>虚拟内存</strong> 会给予你足够的启发！</p>
+<h2 id="更好的算法和数据结构入门-——《算法（第四版）》"><a href="#更好的算法和数据结构入门-——《算法（第四版）》" class="headerlink" title="更好的算法和数据结构入门 ——《算法（第四版）》"></a>更好的算法和数据结构入门 ——《算法（第四版）》</h2><p>这本书的书评得酝酿一会儿，先放张占位图片233</p>
+<figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/algs4.png" style="width: 300px;" alt="algs4">
+  <figcaption>《算法（第四版）》</figcaption>
+</figure>
+
+
+<h1 id="图形学"><a href="#图形学" class="headerlink" title="图形学"></a>图形学</h1><p>下面要介绍的书其实从 2023 年起就在陪伴我了。我了解图形学比正经学计算机内容还要早两年，从高一的时候就一直在看。在高中学校封闭又窒息的环境下，这些书是我唯一可以逃避的去处，给了我活着的理由。</p>
+<p>先放几张占位图片，之后再更~</p>
+<h2 id="图形学入门圣经-——-虎书"><a href="#图形学入门圣经-——-虎书" class="headerlink" title="图形学入门圣经 —— 虎书"></a>图形学入门圣经 —— 虎书</h2><figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/cg.jpg" style="width: 300px;" alt="cg">
+  <figcaption>虎书</figcaption>
+</figure>
+
+<h2 id="实时渲染圣经-——-《实时渲染》"><a href="#实时渲染圣经-——-《实时渲染》" class="headerlink" title="实时渲染圣经 —— 《实时渲染》"></a>实时渲染圣经 —— 《实时渲染》</h2><figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/rtr.png" style="width: 300px;" alt="rtr">
+  <figcaption>RTR4</figcaption>
+</figure>
+
+<h2 id="离线渲染圣经-——《基于物理的渲染：从理论到实现"><a href="#离线渲染圣经-——《基于物理的渲染：从理论到实现" class="headerlink" title="离线渲染圣经 ——《基于物理的渲染：从理论到实现"></a>离线渲染圣经 ——《基于物理的渲染：从理论到实现</h2><figure>
+  <img loading="lazy" src="/post/%E6%9C%80%E8%BF%91%E9%98%85%E8%AF%BB%E7%9A%84%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B9%A6%E7%B1%8D/pbrt.jpg" style="width: 300px;" alt="pbrt">
+  <figcaption>PBRT</figcaption>
+</figure>
+  </div>
+  
+  <footer class="post-footer">
+    <div class="article-tag"><i class="fa-solid fa-tags"></i> <a class="tag-link" href="/tags/%E6%8A%80%E6%9C%AF/">技术</a><a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a></div>
+  </footer>
+  
+</article>
+
+<nav class="post-nav">
+  
+  
+  <a class="post-nav-next" href="/post/Linearly-Transformed-Cosines-%E7%9A%84%E6%95%B0%E5%AD%A6%E5%8A%A8%E6%9C%BA/">
+    <span class="post-nav-label">Next <i class="fa-solid fa-chevron-right"></i></span>
+    <span class="post-nav-title">Linearly Transformed Cosines 的数学动机</span>
+  </a>
+  
+</nav>
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2025-2026 布朗尼蛋糕
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        
+        <li><a href="/">Home</a></li>
+        
+        <li><a href="/about/">About</a></li>
+        
+        <li><a href="/archives/">Writing</a></li>
+        
+        <li><a href="/tags/">Tags</a></li>
+        
+        <li><a href="/links/">Friends</a></li>
+        
+        <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+  </div>
+  
+  
+<div id="footer-post-container">
+  <div id="footer-post">
+    
+    <div id="toc-footer" class="footer-panel" style="display:none"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E5%AD%90"><span class="toc-text">引子</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80"><span class="toc-text">计算机基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9C%AC%E8%B4%A8-%E2%80%94%E2%80%94%E3%80%8A%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A8%8B%E5%BA%8F%E7%9A%84%E6%9E%84%E9%80%A0%E5%92%8C%E8%A7%A3%E9%87%8A%E3%80%8B"><span class="toc-text">程序的本质 ——《计算机程序的构造和解释》</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E7%90%86%E8%A7%A3%E9%80%92%E5%BD%92"><span class="toc-text">重新理解递归</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8B%AC%E7%89%B9%E7%9A%84%E7%A8%8B%E5%BA%8F%E7%BB%93%E6%9E%84"><span class="toc-text">独特的程序结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%87%8A%E5%99%A8%E7%9A%84%E9%AD%94%E6%B3%95"><span class="toc-text">解释器的魔法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BB%E7%A9%BF%E9%BB%91%E7%9B%92-%E2%80%94%E2%80%94%E3%80%8A%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E3%80%8B"><span class="toc-text">击穿黑盒 ——《深入理解计算机系统》</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%9C%A8%E5%85%B7%E4%BD%93%E7%9A%84%E6%9C%BA%E5%99%A8%E4%B8%8A"><span class="toc-text">工作在具体的机器上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%AB%E6%B8%B8%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F"><span class="toc-text">漫游计算机系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E5%A5%BD%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%85%A5%E9%97%A8-%E2%80%94%E2%80%94%E3%80%8A%E7%AE%97%E6%B3%95%EF%BC%88%E7%AC%AC%E5%9B%9B%E7%89%88%EF%BC%89%E3%80%8B"><span class="toc-text">更好的算法和数据结构入门 ——《算法（第四版）》</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E5%AD%A6"><span class="toc-text">图形学</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BE%E5%BD%A2%E5%AD%A6%E5%85%A5%E9%97%A8%E5%9C%A3%E7%BB%8F-%E2%80%94%E2%80%94-%E8%99%8E%E4%B9%A6"><span class="toc-text">图形学入门圣经 —— 虎书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E5%9C%A3%E7%BB%8F-%E2%80%94%E2%80%94-%E3%80%8A%E5%AE%9E%E6%97%B6%E6%B8%B2%E6%9F%93%E3%80%8B"><span class="toc-text">实时渲染圣经 —— 《实时渲染》</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E6%B8%B2%E6%9F%93%E5%9C%A3%E7%BB%8F-%E2%80%94%E2%80%94%E3%80%8A%E5%9F%BA%E4%BA%8E%E7%89%A9%E7%90%86%E7%9A%84%E6%B8%B2%E6%9F%93%EF%BC%9A%E4%BB%8E%E7%90%86%E8%AE%BA%E5%88%B0%E5%AE%9E%E7%8E%B0"><span class="toc-text">离线渲染圣经 ——《基于物理的渲染：从理论到实现</span></a></li></ol></li></ol></div>
+    
+    <div id="actions-footer">
+      
+      <a class="icon" href="#" id="footer-toc"><i class="fa-solid fa-list fa-lg"></i> TOC</a>
+      
+      <a class="icon" href="#" id="footer-top" style="display:none"><i class="fa-solid fa-chevron-up fa-lg"></i> Top</a>
+    </div>
+  </div>
+</div>
+
+  
+  
+<script src="/js/main.js"></script>
+
+</body>
+</html>
